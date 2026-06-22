@@ -68,6 +68,7 @@ async function loadDaily() {
 
 // ── 메인 화면: 오늘의 이슈 + 대통령실 + 정당 카드 ──
 function renderHome() {
+  const board0 = e => (e.boards && e.boards[0] && e.boards[0].url) ? e.boards[0].url : (e.home || "#");
   const issues = DAILY["오늘의 이슈"] || [];
   const issueGroups = [
     { key: "대통령실", label: "🏛️ 대통령실", home: "https://www.president.go.kr/" },
@@ -88,39 +89,39 @@ function renderHome() {
   const issueHtml = `
     <div class="issue-box">
       <div class="issue-head">
-        <div class="issue-title">📌 오늘의 이슈</div>
+        <div class="issue-title">📌 주요 이슈</div>
         <button class="mini-btn" onclick="location.hash='#briefings'">📰 브리핑 모아보기</button>
       </div>
       ${issueGroupHtml
         ? `<div class="issue-grid">${issueGroupHtml}</div>`
-        : '<p class="empty">오늘 등록된 이슈가 없습니다. (정당정책_오늘내용.md 의 “## 오늘의 이슈”에 [대통령실]/[정책브리핑]/[국회]/[정당] 으로 적어주세요)</p>'}
+        : '<p class="empty">등록된 이슈가 없습니다. (정당정책_오늘내용.md 의 “## 오늘의 이슈”에 [대통령실]/[정책브리핑]/[국회]/[정당] 으로 적어주세요)</p>'}
     </div>`;
 
   const presBrief = brief(DAILY[PRESIDENT.name]);
   const presCard = `
     <div class="pcard org" style="border-top-color:${PRESIDENT.color}" onclick="location.hash='#${PRESIDENT.id}'">
-      <h2 style="color:${PRESIDENT.color}">🏛️ ${PRESIDENT.name}</h2>
+      <h2 style="color:${PRESIDENT.color}">🏛️ <a class="title-home" href="${PRESIDENT.home}" style="color:${PRESIDENT.color}" onclick="event.stopPropagation()">${PRESIDENT.name}</a></h2>
       <div class="role">대통령실 브리핑·보도자료 등 공식 자료를 모아봅니다.</div>
-      ${presBrief ? `<div class="snippet">오늘 · ${esc(presBrief)}</div>` : ""}
+      ${presBrief ? `<a class="snippet" href="${board0(PRESIDENT)}" onclick="event.stopPropagation()">최신 · ${esc(presBrief)}</a>` : ""}
       <div class="more" style="color:${PRESIDENT.color}">대통령실 자료 보기 →</div>
     </div>`;
 
   const govBrief = brief(DAILY[GOVERNMENT.name]);
   const govCard = `
     <div class="pcard" style="border-top-color:${GOVERNMENT.color}" onclick="location.hash='#${GOVERNMENT.id}'">
-      <h2 style="color:${GOVERNMENT.color}">🏛️ ${GOVERNMENT.name}</h2>
+      <h2 style="color:${GOVERNMENT.color}">🏛️ <a class="title-home" href="${GOVERNMENT.home}" style="color:${GOVERNMENT.color}" onclick="event.stopPropagation()">${GOVERNMENT.name}</a></h2>
       <div class="role"><b>국무총리</b> · ${esc(GOVERNMENT.pm)} <span class="tag">${esc(GOVERNMENT.pmLoc)}</span></div>
       <div class="role">국무총리·정부부처 장관 명단과 소재지(서울/세종 등)를 봅니다.</div>
-      ${govBrief ? `<div class="snippet">오늘 · ${esc(govBrief)}</div>` : ""}
+      ${govBrief ? `<a class="snippet" href="${board0(GOVERNMENT)}" onclick="event.stopPropagation()">최신 · ${esc(govBrief)}</a>` : ""}
       <div class="more" style="color:${GOVERNMENT.color}">내각 명단 보기 →</div>
     </div>`;
 
   const asmBrief = brief(DAILY[ASSEMBLY.name]);
   const asmCard = `
     <div class="pcard" style="border-top-color:${ASSEMBLY.color}" onclick="location.hash='#${ASSEMBLY.id}'">
-      <h2 style="color:${ASSEMBLY.color}">🏛️ ${ASSEMBLY.name}</h2>
+      <h2 style="color:${ASSEMBLY.color}">🏛️ <a class="title-home" href="${ASSEMBLY.home}" style="color:${ASSEMBLY.color}" onclick="event.stopPropagation()">${ASSEMBLY.name}</a></h2>
       <div class="role">의안·의사일정·국회뉴스 등 공식 자료를 모아봅니다.</div>
-      ${asmBrief ? `<div class="snippet">오늘 · ${esc(asmBrief)}</div>` : ""}
+      ${asmBrief ? `<a class="snippet" href="${board0(ASSEMBLY)}" onclick="event.stopPropagation()">최신 · ${esc(asmBrief)}</a>` : ""}
       <div class="more" style="color:${ASSEMBLY.color}">국회 자료 보기 →</div>
     </div>`;
 
@@ -134,8 +135,8 @@ function renderHome() {
         <div><b>원내대표</b> · ${esc(p.floorLeader)}</div>
         <div><b>최고위원</b> · ${esc(p.supremes)}</div>
       </div>
-      ${b ? `<div class="snippet">오늘 · ${esc(b)}</div>` : ""}
-      <div class="more" style="color:${p.color}">오늘 자료 보기 →</div>
+      ${b ? `<a class="snippet" href="${board0(p)}" onclick="event.stopPropagation()">최신 · ${esc(b)}</a>` : ""}
+      <div class="more" style="color:${p.color}">자료 보기 →</div>
     </div>`; }).join("") + "</div>";
 
   const orgBtn = `<button class="big-btn" onclick="location.hash='#org'">🏛️ 전체 조직 한눈에 보기 (대통령·정부·국회·정당)</button>`;
@@ -149,7 +150,7 @@ function renderDetail(p) {
   const { sched, mats } = splitItems(DAILY[p.name]);
   const dailyHtml = mats.length
     ? "<ul>" + mats.map(t => `<li class="item">${linkify(t)}</li>`).join("") + "</ul>"
-    : '<p class="empty">오늘 등록된 자료가 없습니다.</p>';
+    : '<p class="empty">등록된 자료가 없습니다.</p>';
   const schedHtml = sched.length
     ? "<ul>" + sched.map(t => `<li class="item">📅 ${linkify(t)}</li>`).join("") + "</ul>"
     : '<p class="empty">등록된 일정이 없습니다.</p>';
@@ -167,7 +168,7 @@ function renderDetail(p) {
       <button class="back" onclick="location.hash=''">← 전체 보기</button>
       <h2 style="color:${p.color};border-color:${p.color}">${p.home ? `<a class="title-home" href="${p.home}" style="color:${p.color}">${p.name}</a>` : p.name}</h2>
       ${leadHtml}
-      <div class="sec-title">오늘의 자료 요약</div>
+      <div class="sec-title">최신 자료 요약</div>
       ${dailyHtml}
 
       <div class="sec-title">주요 일정</div>
@@ -179,7 +180,7 @@ function renderDetail(p) {
         ${p.boards.map(b => `<a href="${b.url}">${esc(b.label)}</a>`).join("")}
       </div>
     </div>`;
-  foot.innerHTML = "‘오늘의 자료 요약’은 정당정책_오늘내용.md 내용입니다. · 게시판 링크는 각 당 공식 사이트로 연결됩니다.";
+  foot.innerHTML = "‘최신 자료 요약’은 정당정책_오늘내용.md 내용입니다. · 게시판 링크는 각 당 공식 사이트로 연결됩니다.";
 }
 
 // ── 상세 화면: 정부(내각) ──
@@ -216,7 +217,7 @@ function renderGovernment(g) {
   const { sched, mats } = splitItems(DAILY[g.name]);
   const dailyHtml = mats.length
     ? "<ul>" + mats.map(t => `<li class="item">${linkify(t)}</li>`).join("") + "</ul>"
-    : '<p class="empty">오늘 등록된 자료가 없습니다.</p>';
+    : '<p class="empty">등록된 자료가 없습니다.</p>';
   const schedHtml = sched.length
     ? "<ul>" + sched.map(t => `<li class="item">📅 ${linkify(t)}</li>`).join("") + "</ul>"
     : '<p class="empty">등록된 일정이 없습니다.</p>';
@@ -238,7 +239,7 @@ function renderGovernment(g) {
       <div class="sec-title">정부부처 장관 · 소재지 · 소식</div>
       ${govGroups}
       <p class="note">${esc(g.note)}</p>
-      <div class="sec-title">오늘의 자료 요약</div>
+      <div class="sec-title">최신 자료 요약</div>
       ${dailyHtml}
       <div class="sec-title">주요 일정</div>
       ${schedHtml}
@@ -285,7 +286,7 @@ function entitySection(e, opts = {}) {
     ? (opts.outline
         ? `<ul class="bp-list">${mats.map(outlineItem).join("")}</ul>`
         : "<ul>" + mats.map(t => `<li class="item">${linkify(t)}</li>`).join("") + "</ul>")
-    : '<p class="empty">오늘 등록된 자료가 없습니다.</p>';
+    : '<p class="empty">등록된 자료가 없습니다.</p>';
   const schedHtml = (!opts.matsOnly && sched.length)
     ? "<ul>" + sched.map(t => `<li class="item">📅 ${linkify(t)}</li>`).join("") + "</ul>"
     : "";
@@ -423,7 +424,7 @@ function buildBriefingText() {
     }
     out += "\n";
   }
-  if (!any) out += "오늘 등록된 브리핑이 없습니다.\n";
+  if (!any) out += "등록된 브리핑이 없습니다.\n";
   return out;
 }
 function downloadBriefings() {
@@ -442,15 +443,15 @@ function renderBriefings() {
   const secs = order.map(e => entitySection(e, { matsOnly: true, outline: true })).join("");
   view.innerHTML = `<div class="detail">
       <button class="back" onclick="location.hash=''">← 전체 보기</button>
-      <h2>📰 오늘의 브리핑·모두발언 모아보기</h2>
+      <h2>📰 브리핑·모두발언 모아보기</h2>
       <div class="act-row">
         <button class="reload" onclick="refresh()">새로고침</button>
         <button class="print-btn" onclick="downloadBriefings()">⬇️ 파일로 저장 (.md)</button>
         <button class="print-btn" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
       </div>
-      ${secs || '<p class="empty">오늘 등록된 브리핑이 없습니다.</p>'}
+      ${secs || '<p class="empty">등록된 브리핑이 없습니다.</p>'}
     </div>`;
-  foot.innerHTML = "각 기관·정당의 오늘 브리핑·모두발언 요약을 한 곳에 모았습니다. · 날짜·주체가 함께 표기됩니다. · '파일로 저장'으로 개조식 요약본을 내려받을 수 있습니다.";
+  foot.innerHTML = "각 기관·정당의 최신 브리핑·모두발언 요약을 한 곳에 모았습니다. · 날짜·주체가 함께 표기됩니다. · '파일로 저장'으로 개조식 요약본을 내려받을 수 있습니다.";
 }
 
 function route() {
