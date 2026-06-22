@@ -337,9 +337,9 @@ function renderOrg() {
   const presNode = igPanel(PRESIDENT.name, PRESIDENT.home, PRESIDENT.color,
     `👤 ${esc(PRESIDENT.head)}`, presBody);
 
-  // 2) 정부(내각)
+  // 2) 정부(내각) — 지역별(서울/과천/세종/그 외)로 묶기
   const homeOf = url => { try { return new URL(url).origin + "/"; } catch { return url; } };
-  const minCards = GOVERNMENT.ministers.map(m => {
+  const minCard = m => {
     const lc = locClass(m.loc);
     return `<div class="ig-card" style="--c:${GOVERNMENT.color}">
       <div class="ig-card-t"><a class="ig-home" href="${homeOf(m.url)}" target="_blank" rel="noopener">${esc(m.dept)} <span class="ig-ext">↗</span></a><span class="loc-tag loc-${lc}">${esc(m.loc)}</span></div>
@@ -347,11 +347,23 @@ function renderOrg() {
       ${m.prev ? `<div class="ig-card-v">${esc(m.prev)}</div>` : ""}
       ${m.vice ? `<div class="ig-card-v">차관 · ${esc(m.vice)}</div>` : ""}
     </div>`;
+  };
+  const govRegionDefs = [
+    { key: "서울", label: "🔵 서울" },
+    { key: "과천", label: "🟤 과천" },
+    { key: "세종", label: "🟢 세종" },
+    { key: "기타", label: "⚪ 그 외" }
+  ];
+  const minGroups = govRegionDefs.map(rd => {
+    const list = GOVERNMENT.ministers.filter(m => locClass(m.loc) === rd.key);
+    if (!list.length) return "";
+    return `<div class="ig-label">${rd.label} <span class="gt-count">${list.length}곳</span></div>
+       <div class="ig-grid">${list.map(minCard).join("")}</div>`;
   }).join("");
   const govNode = igPanel(GOVERNMENT.name, "https://www.opm.go.kr/", GOVERNMENT.color,
     `👤 국무총리 · ${esc(GOVERNMENT.pm)} <span class="loc-tag loc-세종">${esc(GOVERNMENT.pmLoc)}</span>`,
-    `<div class="ig-label">정부 부처 (${GOVERNMENT.ministers.length})</div>
-     <div class="ig-grid">${minCards}</div>`);
+    `<div class="ig-label">정부 부처 (${GOVERNMENT.ministers.length}) · 지역별</div>
+     ${minGroups}`);
 
   // 3) 국회
   const blocCards = ASSEMBLY.negoBlocs.map(b => `
