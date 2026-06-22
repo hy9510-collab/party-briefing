@@ -77,14 +77,22 @@ function renderHome() {
     { key: "정당", label: "🏳️ 정당", home: "" }
   ];
   const stripTag = t => t.replace(/^\[[^\]]+\]\s*/, "");
+  // 이슈 한 줄: 날짜는 칩으로, 제목 전체를 게시판·원문 링크로 (긴 URL은 숨김)
+  const issueLine = raw => {
+    const { tag, text, link } = parseMat(raw);
+    const chip = tag ? `<span class="bp-tag">${esc(tag)}</span> ` : "";
+    return link
+      ? `<li class="item">${chip}<a class="issue-link" href="${link}" target="_blank" rel="noopener">${esc(text)} ›</a></li>`
+      : `<li class="item">${chip}${esc(text)}</li>`;
+  };
   const issueGroupHtml = issueGroups.map(g => {
     const list = issues.filter(t => t.startsWith(`[${g.key}]`)).map(stripTag);
     if (!list.length) return "";
     const title = g.home
-      ? `<a class="issue-grp-link" href="${g.home}">${g.label} →</a>`
+      ? `<a class="issue-grp-link" href="${g.home}" target="_blank" rel="noopener">${g.label} →</a>`
       : `<span class="issue-grp-link">${g.label}</span>`;
     return `<div class="issue-grp"><div class="issue-grp-title">${title}</div>
-      <ul>${list.map(t => `<li class="item">${linkify(t)}</li>`).join("")}</ul></div>`;
+      <ul>${list.map(issueLine).join("")}</ul></div>`;
   }).join("");
   const issueHtml = `
     <div class="issue-box">

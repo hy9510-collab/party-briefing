@@ -153,14 +153,36 @@ def build_md():
     ]
     body = "\n\n".join(f"## {name}\n" + "\n".join(items) for name, items in sections)
 
+    # 메인 '주요 이슈': 기관별 첫 항목을 태그와 함께(원문 링크 유지) 뽑아온다
+    secmap = dict(sections)
+
+    def first(name):
+        items = secmap.get(name) or []
+        return items[0][2:] if items else None  # 앞의 "- " 제거
+
+    issue_lines = []
+    pres = first("대통령실")
+    if pres:
+        issue_lines.append(f"- [대통령실] {pres}")
+    issue_lines.append(f"- [정책브리핑] {get_policy()[0][2:]}")
+    asm = first("국회")
+    if asm:
+        issue_lines.append(f"- [국회] {asm}")
+    minj = first("더불어민주당")
+    if minj:
+        issue_lines.append(f"- [정당] (민주당) {minj}")
+    ppp = first("국민의힘")
+    if ppp:
+        issue_lines.append(f"- [정당] (국민의힘) {ppp}")
+    issue_block = "\n".join(issue_lines)
+
     md = f"""# 오늘의 정당정책·대통령실 브리핑 ({TODAY_STR} 기준)
 
 > 형식: "## 구분" 아래 "- 자료 (원문: 링크)" / 일정은 "- [일정] 내용"
 > 매일 자동으로 각 공식 게시판에서 수집합니다. 서버 렌더링 게시판(민주당·국민의힘)은 실제 최신 제목을, JS 게시판은 게시판 링크를 안내합니다.
 
 ## 오늘의 이슈
-- [{TODAY_STR}] 각 기관·정당 게시판 자동 수집 완료 — 아래 섹션을 확인하세요.
-- [정책브리핑] {get_policy()[0][2:]}
+{issue_block}
 
 {body}
 """
