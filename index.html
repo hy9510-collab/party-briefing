@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한눈에 보는 정치 브리핑</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* 한글은 단어 단위로 줄바꿈, 긴 URL 등은 강제 줄바꿈 → 글자 잘림 방지 */
+  body, .pcard, .detail, .issue-box { word-break: keep-all; overflow-wrap: anywhere; }
+  body { font-family: -apple-system, "Malgun Gothic", sans-serif; background: #f4f5f7; color: #1a1a1a; display: flex; justify-content: center; padding: 24px; }
+  .wrap { width: 100%; max-width: 720px; }
+  .top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  header h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
+  @media (max-width: 520px) { header h1 { font-size: 26px; } }
+  .update-btn { background: #3a6df0; color: #fff; padding: 9px 14px; font-size: 14px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; white-space: nowrap; }
+  .update-btn:hover { background: #2f5bd0; }
+  .update-btn:disabled { background: #9bb4ef; cursor: default; }
+  header .date { color: #666; font-size: 14px; margin: 4px 0 2px; }
+  header .updated { color: #999; font-size: 12px; margin-bottom: 18px; }
+
+  /* 오늘의 이슈 박스 */
+  .issue-box { background: #fff8e6; border: 1px solid #ffe2a8; border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; }
+  .issue-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .issue-title { font-size: 16px; font-weight: 700; color: #a06a00; }
+  .mini-btn { background: #fff; color: #a06a00; border: 1px solid #e6c780; padding: 6px 11px; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+  .mini-btn:hover { background: #fff3d6; }
+  .big-btn { display: block; width: 100%; background: #2e3b52; color: #fff; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 12px; cursor: pointer; margin-bottom: 16px; }
+  .big-btn:hover { background: #1f2a3d; }
+  .all-sec { background: #fff; border-radius: 12px; padding: 14px 16px; margin-top: 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.05); }
+  .all-sec h3 { font-size: 17px; margin-bottom: 6px; }
+  .all-more { font-size: 13px; font-weight: 600; color: #3a6df0; cursor: pointer; }
+  .org-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .org-chip { font-size: 12.5px; background: #eef1f6; color: #334; border-radius: 7px; padding: 4px 9px; }
+  .lead-table td.bloc-note { font-size: 12px; color: #888; }
+  .issue-box ul { list-style: none; }
+  .issue-box li.item { border-bottom: 1px solid #f1e6c8; padding: 8px 0; line-height: 1.55; }
+  .issue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
+  @media (max-width: 520px) { .issue-grid { grid-template-columns: 1fr; } }
+  .issue-grp { margin-top: 12px; }
+  .issue-grp:nth-child(-n+2) { margin-top: 4px; }
+  .issue-grp-title { font-size: 13.5px; font-weight: 700; margin-bottom: 2px; }
+  .issue-grp-link { color: #a06a00; text-decoration: none; }
+  a.issue-grp-link:hover { text-decoration: underline; }
+
+  /* 대통령실 카드(가로 전체) */
+  .pcard.org { margin-bottom: 16px; }
+
+  /* 메인: 정당 카드 그리드 */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pcard { background: #fff; border-radius: 14px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); cursor: pointer; border-top: 5px solid; transition: transform .08s; }
+  .pcard:hover { transform: translateY(-2px); }
+  .pcard h2 { font-size: 18px; margin-bottom: 10px; }
+  .pcard .role { font-size: 13px; color: #444; line-height: 1.6; }
+  .pcard .role b { color: #111; }
+  .pcard .snippet { margin-top: 10px; font-size: 12.5px; color: #555; background: #f7f8fa; border-radius: 8px; padding: 7px 9px; line-height: 1.5; }
+  .pcard .more { margin-top: 12px; font-size: 13px; font-weight: 600; }
+
+  /* 상세 페이지 */
+  .detail { background: #fff; border-radius: 16px; padding: 28px 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+  .back { display: inline-block; margin-bottom: 16px; font-size: 14px; color: #3a6df0; cursor: pointer; background: none; border: none; padding: 0; }
+  .detail h2 { font-size: 22px; padding-bottom: 10px; border-bottom: 3px solid; margin-bottom: 16px; }
+  .sec-title { font-size: 15px; font-weight: 700; margin: 20px 0 8px; color: #333; }
+  .lead-table { width: 100%; font-size: 14px; border-collapse: collapse; }
+  .lead-table th { text-align: left; width: 90px; color: #666; font-weight: 600; padding: 6px 8px 6px 0; vertical-align: top; }
+  .lead-table td { padding: 6px 0; line-height: 1.55; }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; background: #eef1f6; color: #667; margin-left: 6px; }
+  ul { list-style: none; }
+  li.item { padding: 10px 0; font-size: 15px; line-height: 1.6; border-bottom: 1px solid #f2f2f2; }
+  .empty { font-size: 14px; color: #aaa; padding: 8px 0; }
+  /* 정부 부처 목록(가독성 개선: 소재지별 그룹 + 카드형) */
+  .gov-group-title { font-size: 14px; font-weight: 700; margin: 18px 0 10px; padding: 7px 12px; border-radius: 9px; display: flex; align-items: center; gap: 8px; }
+  .gov-group-title .gt-count { font-size: 12px; font-weight: 600; opacity: .8; }
+  .gt-세종 { background: #e3f0e9; color: #226047; }
+  .gt-서울 { background: #e6eef9; color: #234ba8; }
+  .gt-과천 { background: #f0ece3; color: #7a5d27; }
+  .gt-기타 { background: #eee; color: #555; }
+  .gov-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gov-item { border: 1px solid #e6e9ef; border-radius: 11px; padding: 12px 14px; background: #fafbfc; }
+  .gov-item .dept { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .gov-item .dept-home { color: inherit; text-decoration: none; }
+  .gov-item .dept-home:hover { text-decoration: underline; }
+  .title-home { text-decoration: none; }
+  .title-home:hover { text-decoration: underline; }
+  .gov-item .minister { font-size: 14px; color: #444; margin-top: 3px; }
+  .gov-item .since { font-size: 11.5px; color: #888; white-space: nowrap; }
+  .gov-item .prev { font-size: 12.5px; color: #777; margin-top: 2px; }
+  .gov-item .vice { font-size: 13px; color: #555; margin-top: 2px; }
+  .gov-item .loc-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; }
+  .gov-item .loc-세종 { background: #e3f0e9; color: #2e7d5b; }
+  .gov-item .loc-서울 { background: #e6eef9; color: #2f5bd0; }
+  .gov-item .loc-과천 { background: #f0ece3; color: #8a6a2e; }
+  .gov-item .loc-기타 { background: #eee; color: #555; }
+  .gov-item a.dept-link { font-size: 13px; font-weight: 600; color: #2e7d5b; text-decoration: none; display: inline-block; margin-top: 8px; }
+  .gov-item a.dept-link:hover { text-decoration: underline; }
+  @media (max-width: 520px) { .gov-list { grid-template-columns: 1fr; } }
+  .boards { display: flex; flex-wrap: wrap; gap: 8px; }
+  .boards a { font-size: 13px; padding: 8px 12px; border-radius: 9px; background: #f4f5f7; color: #334; text-decoration: none; font-weight: 600; }
+  .boards a:hover { background: #e7ebf2; }
+  a.inline { color: #3a6df0; text-decoration: none; word-break: break-all; }
+  a.inline:hover { text-decoration: underline; }
+  /* 브리핑 모아보기: 개조식(아웃라인) 목록 */
+  .bp-list { list-style: none; margin-top: 4px; }
+  .bp-item { position: relative; padding: 7px 0 7px 16px; line-height: 1.55; font-size: 14.5px; border-bottom: 1px solid #f2f2f2; }
+  .bp-item:last-child { border-bottom: none; }
+  .bp-item::before { content: "•"; position: absolute; left: 2px; color: #999; }
+  .bp-tag { display: inline-block; font-size: 11.5px; font-weight: 700; color: #4a5568; background: #eef1f6; border-radius: 6px; padding: 1px 7px; margin-right: 4px; vertical-align: middle; }
+  .bp-src { font-size: 12.5px; font-weight: 600; color: #3a6df0; text-decoration: none; white-space: nowrap; margin-left: 4px; }
+  .bp-src:hover { text-decoration: underline; }
+  /* 전체 조직 인포그래픽 */
+  .ig { display: flex; flex-direction: column; }
+  .ig-link { width: 3px; height: 20px; background: #d4d9e2; margin: 0 auto; }
+  .ig-panel { border: 2px solid var(--c); border-radius: 16px; padding: 16px 18px; background: #fff; }
+  .ig-panel-head { font-size: 19px; font-weight: 800; color: var(--c); margin-bottom: 12px; }
+  .ig-home { color: inherit; text-decoration: none; cursor: pointer; }
+  .ig-home:hover { text-decoration: underline; }
+  .ig-ext { font-size: 0.75em; opacity: 0.7; }
+  .ig-leader { background: var(--c); color: #fff; border-radius: 11px; padding: 11px 15px; font-size: 15px; font-weight: 700; line-height: 1.4; }
+  .ig-sub { margin-top: 9px; font-size: 14px; font-weight: 600; color: #333; padding-left: 2px; }
+  .ig-label { font-size: 12.5px; font-weight: 700; color: #8a93a3; margin: 15px 0 4px; }
+  .ig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 8px; margin-top: 8px; }
+  .ig-grid-2 { grid-template-columns: 1fr 1fr; }
+  .ig-card { border: 1px solid #e6e9ef; border-left: 4px solid var(--c, #ccd); border-radius: 10px; padding: 10px 12px; background: #fafbfc; }
+  .ig-card-t { font-size: 14px; font-weight: 700; color: #1a1a1a; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .ig-card-s { font-size: 13px; color: #444; margin-top: 4px; }
+  .ig-card-v { font-size: 12.5px; color: #6a7280; margin-top: 3px; }
+  .ig-news { display: inline-block; margin-top: 6px; font-size: 12px; color: var(--c, #1a4f8a); text-decoration: none; font-weight: 600; }
+  .ig-news:hover { text-decoration: underline; }
+  .ig-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .ig-chip { font-size: 12px; background: #eef1f6; color: #445; border-radius: 7px; padding: 4px 9px; }
+  .ig-note { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.5; }
+  .loc-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+  .loc-tag.loc-세종 { background: #e3f0e9; color: #2e7d5b; }
+  .loc-tag.loc-서울 { background: #e6eef9; color: #2f5bd0; }
+  .loc-tag.loc-과천 { background: #f0ece3; color: #8a6a2e; }
+  .loc-tag.loc-기타 { background: #eee; color: #555; }
+  @media (max-width: 520px) {
+    .ig-grid { grid-template-columns: 1fr 1fr; }
+    .ig-grid-2 { grid-template-columns: 1fr; }
+  }
+  .note { font-size: 12px; color: #999; margin-top: 22px; line-height: 1.6; }
+  .reload { margin-top: 8px; font-size: 13px; color: #3a6df0; background: none; border: none; cursor: pointer; padding: 0; }
+  .act-row { display: flex; align-items: center; gap: 14px; margin: 8px 0 4px; }
+  .act-row .reload { margin-top: 0; }
+  .print-btn { font-size: 13px; font-weight: 600; color: #2e3b52; background: #eef1f6; border: 1px solid #dde2ea; border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+  .print-btn:hover { background: #e2e7f0; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .update-btn, .back, .reload, .print-btn, .act-row, .all-more, .boards { display: none !important; }
+    .detail, .all-sec, .pcard { box-shadow: none; }
+    a.inline, a.title-home { color: #000; text-decoration: none; }
+  }
+  @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="top-row">
+        <h1>한눈에 보는 정치 브리핑</h1>
+        <button id="updateBtn" class="update-btn">🔄 지금 업데이트</button>
+      </div>
+      <p class="date" id="date"></p>
+      <p class="updated" id="updated"></p>
+    </header>
+    <div id="view"></div>
+    <p class="note" id="foot"></p>
+  </div>
+
+<script src="data.js?v=41"></script>
+<script src="app.js?v=41"></script>
+</body>
+</html>
