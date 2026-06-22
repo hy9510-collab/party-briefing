@@ -410,7 +410,7 @@ function buildBriefingText() {
   const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES];
   const today = new Date().toLocaleDateString("ko-KR",
     { year: "numeric", month: "long", day: "numeric", weekday: "long" });
-  let out = `# 브리핑 모아보기 (${today} 기준)\n\n`;
+  let out = `${today}\n# 오늘의 브리핑\n\n`;
   let any = false;
   for (const e of order) {
     const { mats } = splitItems(DAILY[e.name]);
@@ -441,9 +441,12 @@ function downloadBriefings() {
 function renderBriefings() {
   const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES];
   const secs = order.map(e => entitySection(e, { matsOnly: true, outline: true })).join("");
+  const todayStr = new Date().toLocaleDateString("ko-KR",
+    { year: "numeric", month: "long", day: "numeric", weekday: "long" });
   view.innerHTML = `<div class="detail">
       <button class="back" onclick="location.hash=''">← 전체 보기</button>
-      <h2>📰 브리핑·모두발언 모아보기</h2>
+      <div class="brief-date">${todayStr}</div>
+      <h2>📰 오늘의 브리핑</h2>
       <div class="act-row">
         <button class="reload" onclick="refresh()">새로고침</button>
         <button class="print-btn" onclick="downloadBriefings()">⬇️ 파일로 저장 (.md)</button>

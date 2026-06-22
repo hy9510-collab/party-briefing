@@ -135,8 +135,8 @@ def get_jokuk():
 
 
 def get_reform():
-    url = "https://www.reformparty.kr/notice"
-    return fallback("공지", url)
+    url = "https://www.reformparty.kr/briefing"
+    return fallback("논평·브리핑", url)
 
 
 # ── md 생성 ───────────────────────────────────────────────────────────────────
