@@ -372,7 +372,8 @@ function renderOrg() {
       <div class="ig-card-s">원내대표 · ${esc(b.rep)}</div>
       <div class="ig-card-v">수석부대표 · ${esc(b.deputy)}</div>
     </div>`).join("");
-  const comChips = ASSEMBLY.committees.map(c => `<span class="ig-chip">${esc(c)}</span>`).join("");
+  const comChips = ASSEMBLY.committees.map(c =>
+    `<a class="ig-chip" href="${c.url}" target="_blank" rel="noopener">${esc(c.name)}</a>`).join("");
   const asmNode = igPanel(ASSEMBLY.name, ASSEMBLY.home, ASSEMBLY.color,
     `👤 국회의장 · ${esc(ASSEMBLY.speaker)}`,
     `<div class="ig-sub">부의장 · ${esc(ASSEMBLY.viceSpeakers)}</div>

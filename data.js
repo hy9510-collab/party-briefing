@@ -86,11 +86,23 @@ window.ASSEMBLY = {
   // 17개 상임위원회. 후반기 위원장은 원구성 협상 중이라 대부분 미확정
   committeesNote: "22대 후반기 상임위원장은 원구성 협상 중(2026-06-18 시한)이라 대부분 미확정. 확정되는 대로 채워집니다.",
   committees: [
-    "국회운영위원회", "법제사법위원회", "정무위원회", "기획재정위원회",
-    "교육위원회", "과학기술정보방송통신위원회", "외교통일위원회", "국방위원회",
-    "행정안전위원회", "문화체육관광위원회", "농림축산식품해양수산위원회",
-    "산업통상자원중소벤처기업위원회", "보건복지위원회", "환경노동위원회",
-    "국토교통위원회", "정보위원회", "여성가족위원회"
+    { name: "국회운영위원회", url: "https://steering.na.go.kr:444/steering/index.do" },
+    { name: "법제사법위원회", url: "https://legislation.na.go.kr:444/legislation/index.do" },
+    { name: "정무위원회", url: "https://policy.na.go.kr:444/policy/index.do" },
+    { name: "기획재정위원회", url: "https://finance.na.go.kr:444/finance/index.do" },
+    { name: "교육위원회", url: "https://edu.na.go.kr:444/edu/index.do" },
+    { name: "과학기술정보방송통신위원회", url: "https://science.na.go.kr:444/science/index.do" },
+    { name: "외교통일위원회", url: "https://uft.na.go.kr:444/uft/index.do" },
+    { name: "국방위원회", url: "https://defense.na.go.kr:444/defense/index.do" },
+    { name: "행정안전위원회", url: "https://adminhom.na.go.kr:444/adminhom/index.do" },
+    { name: "문화체육관광위원회", url: "https://cst.na.go.kr:444/cst/index.do" },
+    { name: "농림축산식품해양수산위원회", url: "https://agri.na.go.kr:444/agri/index.do" },
+    { name: "산업통상자원중소벤처기업위원회", url: "https://industry.na.go.kr:444/industry/index.do" },
+    { name: "보건복지위원회", url: "https://health.na.go.kr:444/health/index.do" },
+    { name: "환경노동위원회", url: "https://environment.na.go.kr:444/environment/index.do" },
+    { name: "국토교통위원회", url: "https://ltc.na.go.kr:444/ltc/index.do" },
+    { name: "정보위원회", url: "https://intelligence.na.go.kr:444/intelligence/index.do" },
+    { name: "여성가족위원회", url: "https://women.na.go.kr:444/women/index.do" }
   ],
   // 교섭단체(의석 20석 이상). 대표=원내대표, 부대표=원내수석부대표
   negoBlocs: [
