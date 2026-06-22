@@ -117,7 +117,7 @@ function renderHome() {
   const govBrief = brief(DAILY[GOVERNMENT.name]);
   const govCard = `
     <div class="pcard" style="border-top-color:${GOVERNMENT.color}" onclick="location.hash='#${GOVERNMENT.id}'">
-      <h2 style="color:${GOVERNMENT.color}">🏛️ <a class="title-home" href="${GOVERNMENT.home}" style="color:${GOVERNMENT.color}" onclick="event.stopPropagation()">${GOVERNMENT.name}</a></h2>
+      <h2 style="color:${GOVERNMENT.color}">🏛️ <a class="title-home" href="${GOVERNMENT.pmOffices[0].url}" target="_blank" rel="noopener" style="color:${GOVERNMENT.color}" onclick="event.stopPropagation()">${GOVERNMENT.name}</a></h2>
       <div class="role"><b>국무총리</b> · ${esc(GOVERNMENT.pm)} <span class="tag">${esc(GOVERNMENT.pmLoc)}</span></div>
       <div class="role">국무총리·정부부처 장관 명단과 소재지(서울/세종 등)를 봅니다.</div>
       ${govBrief ? `<a class="snippet" href="${board0(GOVERNMENT)}" onclick="event.stopPropagation()">최신 · ${esc(govBrief)}</a>` : ""}
