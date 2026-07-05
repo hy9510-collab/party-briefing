@@ -120,6 +120,13 @@ def get_policy():
     return [f"- ({TODAY_LABEL} 정책 자료는 정책브리핑에서 확인하세요) (원문: {url})"]
 
 
+def get_government():
+    return [
+        "- [국무조정실] 국무조정실·국무총리비서실 소식(보도자료) (원문: https://www.opm.go.kr/opm/news/press-release.do)",
+        "- [정책브리핑] 대한민국 정책브리핑 (원문: https://www.korea.kr/)",
+    ]
+
+
 def get_assembly():
     news = "https://www.naon.go.kr/"
     bill = "https://likms.assembly.go.kr/bill/main.do"
@@ -146,6 +153,7 @@ def build_md():
     sections = [
         ("국회", get_assembly()),
         ("대통령실", get_president()),
+        ("정부 (내각)", get_government()),
         ("더불어민주당", get_minjoo()),
         ("조국혁신당", get_jokuk()),
         ("국민의힘", get_ppp()),

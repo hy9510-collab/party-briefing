@@ -38,8 +38,9 @@ window.GOVERNMENT = {
   id: "government",
   name: "정부 (내각)",
   color: "#2e7d5b",
-  home: "https://www.gov.kr/",
+  home: "https://www.opm.go.kr/",
   pm: "김민석 (국무총리, 2025-07-03 취임)",
+  pmPrev: "前 더불어민주당 수석최고위원 · 국회의원 4선(서울 영등포을, 15·16·21·22대)",
   pmLoc: "세종",
   note: "정부조직 개편 반영: 기획재정부 → 재정경제부+기획예산처 / 환경부 → 기후에너지환경부 / 여성가족부 → 성평등가족부 / 산업통상자원부 → 산업통상부. 개각 진행 중이라 일부 장관·소재지는 바뀔 수 있습니다.",
   // 부처는 아니지만 총리를 보좌하는 핵심 사무기구 — 부처 목록 위에 별도 카드로 표시
@@ -69,7 +70,6 @@ window.GOVERNMENT = {
     { dept: "중소벤처기업부", name: "한성숙", prev: "前 네이버 대표이사", loc: "세종", since: "2025-07-23", url: "https://www.mss.go.kr/site/smba/ex/bbs/List.do?cbIdx=86" }
   ],
   boards: [
-    { label: "정부24", url: "https://www.gov.kr/" },
     { label: "국무조정실·국무총리비서실", url: "https://www.opm.go.kr/" },
     { label: "대한민국 정책브리핑", url: "https://www.korea.kr/" }
   ]
@@ -83,31 +83,31 @@ window.ASSEMBLY = {
   home: "https://www.assembly.go.kr/",
   speaker: "조정식 (더불어민주당·경기 시흥시을, 2026-06-05 선출)",
   viceSpeakers: "남인순(더불어민주당)·박덕흠(국민의힘)",
-  // 17개 상임위원회. 후반기 위원장은 원구성 협상 중이라 대부분 미확정
-  committeesNote: "22대 후반기 상임위원장은 원구성 협상 중(2026-06-18 시한)이라 대부분 미확정. 확정되는 대로 채워집니다.",
+  // 17개 상임위원회. 22대 후반기 원구성(2026-06-30) 반영. 명칭 일부 개편, 위원장 11곳 확정(모두 민주당)
+  committeesNote: "22대 후반기 원구성 완료(2026-06-30, 더불어민주당 주도 단독 선출). 위원장 11곳(예산결산특별위 이광재 포함)은 모두 민주당 소속이며, 교육·외교통일·산업통상자원중소벤처기업·보건복지·국토교통·정보·성평등가족위원장은 여야 배분 미합의로 미확정입니다. 상임위 명칭도 일부 개편(재정경제기획·기후에너지환경노동·성평등가족).",
   committees: [
-    { name: "국회운영위원회", url: "https://steering.na.go.kr:444/steering/index.do" },
-    { name: "법제사법위원회", url: "https://legislation.na.go.kr:444/legislation/index.do" },
-    { name: "정무위원회", url: "https://policy.na.go.kr:444/policy/index.do" },
-    { name: "기획재정위원회", url: "https://finance.na.go.kr:444/finance/index.do" },
-    { name: "교육위원회", url: "https://edu.na.go.kr:444/edu/index.do" },
-    { name: "과학기술정보방송통신위원회", url: "https://science.na.go.kr:444/science/index.do" },
-    { name: "외교통일위원회", url: "https://uft.na.go.kr:444/uft/index.do" },
-    { name: "국방위원회", url: "https://defense.na.go.kr:444/defense/index.do" },
-    { name: "행정안전위원회", url: "https://adminhom.na.go.kr:444/adminhom/index.do" },
-    { name: "문화체육관광위원회", url: "https://cst.na.go.kr:444/cst/index.do" },
-    { name: "농림축산식품해양수산위원회", url: "https://agri.na.go.kr:444/agri/index.do" },
-    { name: "산업통상자원중소벤처기업위원회", url: "https://industry.na.go.kr:444/industry/index.do" },
-    { name: "보건복지위원회", url: "https://health.na.go.kr:444/health/index.do" },
-    { name: "환경노동위원회", url: "https://environment.na.go.kr:444/environment/index.do" },
-    { name: "국토교통위원회", url: "https://ltc.na.go.kr:444/ltc/index.do" },
-    { name: "정보위원회", url: "https://intelligence.na.go.kr:444/intelligence/index.do" },
-    { name: "여성가족위원회", url: "https://women.na.go.kr:444/women/index.do" }
+    { name: "국회운영위원회", head: "위원장 한병도", url: "https://steering.na.go.kr:444/steering/index.do" },
+    { name: "법제사법위원회", head: "위원장 서영교", url: "https://legislation.na.go.kr:444/legislation/index.do" },
+    { name: "정무위원회", head: "위원장 유동수", url: "https://policy.na.go.kr:444/policy/index.do" },
+    { name: "재정경제기획위원회", head: "위원장 조승래", url: "https://finance.na.go.kr:444/finance/index.do" },
+    { name: "교육위원회", head: "위원장 미확정", url: "https://edu.na.go.kr:444/edu/index.do" },
+    { name: "과학기술정보방송통신위원회", head: "위원장 송기헌", url: "https://science.na.go.kr:444/science/index.do" },
+    { name: "외교통일위원회", head: "위원장 미확정", url: "https://uft.na.go.kr:444/uft/index.do" },
+    { name: "국방위원회", head: "위원장 진성준", url: "https://defense.na.go.kr:444/defense/index.do" },
+    { name: "행정안전위원회", head: "위원장 김영진", url: "https://adminhom.na.go.kr:444/adminhom/index.do" },
+    { name: "문화체육관광위원회", head: "위원장 이재정", url: "https://cst.na.go.kr:444/cst/index.do" },
+    { name: "농림축산식품해양수산위원회", head: "위원장 서삼석", url: "https://agri.na.go.kr:444/agri/index.do" },
+    { name: "산업통상자원중소벤처기업위원회", head: "위원장 미확정", url: "https://industry.na.go.kr:444/industry/index.do" },
+    { name: "보건복지위원회", head: "위원장 미확정", url: "https://health.na.go.kr:444/health/index.do" },
+    { name: "기후에너지환경노동위원회", head: "위원장 김정호", url: "https://environment.na.go.kr:444/environment/index.do" },
+    { name: "국토교통위원회", head: "위원장 미확정", url: "https://ltc.na.go.kr:444/ltc/index.do" },
+    { name: "정보위원회", head: "위원장 미확정", url: "https://intelligence.na.go.kr:444/intelligence/index.do" },
+    { name: "성평등가족위원회", head: "위원장 미확정", url: "https://women.na.go.kr:444/women/index.do" }
   ],
   // 교섭단체(의석 20석 이상). 대표=원내대표, 부대표=원내수석부대표
   negoBlocs: [
-    { party: "더불어민주당", rep: "한병도 (원내대표)", deputy: "확인 필요 (원내수석부대표)" },
-    { party: "국민의힘", rep: "정점식 (원내대표)", deputy: "확인 필요 (원내수석부대표)" }
+    { party: "더불어민주당", rep: "한병도 (원내대표)", deputy: "확인 필요 (원내수석부대표)", url: "https://www.assembly.go.kr/portal/na/naComm/naAssmPoly.do?menuNo=600155" },
+    { party: "국민의힘", rep: "정점식 (원내대표)", deputy: "확인 필요 (원내수석부대표)", url: "https://www.assembly.go.kr/portal/na/naComm/naAssmPoly.do?menuNo=600155" }
   ],
   negoNote: "조국혁신당·개혁신당 등은 비교섭단체. 후반기 원구성·인선에 따라 변동 가능.",
   boards: [
@@ -181,3 +181,87 @@ window.PARTIES = [
     ]
   }
 ];
+
+// ── 경기도 31개 시·군 (시장: 민선8기 현직 2022 / →표시는 2026-06-03 당선자 7-1 취임) ──
+window.GYEONGGI = {
+  name: "경기도",
+  color: "#0c4da2",
+  home: "https://www.gg.go.kr/",
+  gov: "김동연 (민선8기)",
+  govParty: "민",
+  slogan: "변화의 중심, 기회의 경기",
+  note: "권역 안에서 인구 많은 순. 인구는 행정안전부 주민등록인구 2026년 5월 기준(KOSIS), 면적·행정구역은 각 시군 공식·위키 기준. ‘→’ 뒤는 2026-06-03 당선자(7-1 취임), 바탕색=시장 소속 정당(파랑 더불어민주당·빨강 국민의힘). 슬로건은 공식 확인된 곳만 표기.",
+  // 권역(남부/북부)으로 구분, 각 권역 내에서는 주민등록 인구 많은 순(행정안전부·경기통계 최신 기준)
+  cities: [
+    // ── 경기남부 (21) · 인구순(2026-05) ──
+    { region: "남", name: "수원시", mayor: "이재준", pNow: "민", elect: "", pElect: "민", electTerm: 2, slogan: "수원을 새롭게, 시민을 빛나게", pop: 1186120, area: 121.0, gu: 4, eup: 0, myeon: 0, dong: 44, url: "https://www.suwon.go.kr/" },
+    { region: "남", name: "용인시", mayor: "이상일", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "", pop: 1089693, area: 591.2, gu: 3, eup: 4, myeon: 3, dong: 32, url: "https://www.yongin.go.kr/" },
+    { region: "남", name: "화성시", mayor: "정명근", pNow: "민", elect: "", pElect: "민", electTerm: 2, slogan: "길이 열리는 화성시", pop: 997713, area: 700.0, gu: 4, eup: 4, myeon: 9, dong: 16, url: "https://www.hscity.go.kr/" },
+    { region: "남", name: "성남시", mayor: "신상진", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "희망도시 성남", pop: 903747, area: 141.6, gu: 3, eup: 0, myeon: 0, dong: 50, url: "https://www.seongnam.go.kr/" },
+    { region: "남", name: "부천시", mayor: "조용익", pNow: "민", elect: "", pElect: "민", electTerm: 2, slogan: "다시 뛰는 부천, 시민과 함께", pop: 756037, area: 53.4, gu: 3, eup: 0, myeon: 0, dong: 37, url: "https://www.bucheon.go.kr/" },
+    { region: "남", name: "평택시", mayor: "정장선", pNow: "민", elect: "최원용", pElect: "민", electTerm: 1, slogan: "시민중심 새로운 평택", pop: 618234, area: 458.1, gu: 0, eup: 4, myeon: 5, dong: 16, url: "https://www.pyeongtaek.go.kr/" },
+    { region: "남", name: "안산시", mayor: "이민근", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "", pop: 609712, area: 155.2, gu: 2, eup: 0, myeon: 0, dong: 25, url: "https://www.ansan.go.kr/" },
+    { region: "남", name: "안양시", mayor: "최대호", pNow: "민", elect: "", pElect: "민", electTerm: 4, slogan: "시민과 함께하는 스마트 행복도시 안양", pop: 562341, area: 58.5, gu: 2, eup: 0, myeon: 0, dong: 31, url: "https://www.anyang.go.kr/" },
+    { region: "남", name: "시흥시", mayor: "임병택", pNow: "민", elect: "", pElect: "민", electTerm: 3, slogan: "행복한 변화, 새로운 시흥", pop: 514804, area: 139.1, gu: 0, eup: 0, myeon: 0, dong: 20, url: "https://www.siheung.go.kr/" },
+    { region: "남", name: "김포시", mayor: "김병수", pNow: "국", elect: "이기형", pElect: "민", electTerm: 1, slogan: "FULL LIFE 김포", pop: 484047, area: 276.6, gu: 0, eup: 3, myeon: 3, dong: 8, url: "https://www.gimpo.go.kr/" },
+    { region: "남", name: "광주시", mayor: "방세환", pNow: "국", elect: "박관열", pElect: "민", electTerm: 1, slogan: "클린광주", pop: 398250, area: 431.0, gu: 0, eup: 2, myeon: 4, dong: 10, url: "https://www.gjcity.go.kr/" },
+    { region: "남", name: "하남시", mayor: "이현재", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "살고 싶은 도시, 도약하는 하남", pop: 327571, area: 93.1, gu: 0, eup: 0, myeon: 0, dong: 14, url: "https://www.hanam.go.kr/" },
+    { region: "남", name: "광명시", mayor: "박승원", pNow: "민", elect: "", pElect: "민", electTerm: 3, slogan: "함께하는 시민, 웃는 광명", pop: 303479, area: 38.5, gu: 0, eup: 0, myeon: 0, dong: 19, url: "https://www.gm.go.kr/" },
+    { region: "남", name: "오산시", mayor: "이권재", pNow: "국", elect: "조용호", pElect: "민", electTerm: 1, slogan: "", pop: 252414, area: 42.7, gu: 0, eup: 0, myeon: 0, dong: 8, url: "https://www.osan.go.kr/" },
+    { region: "남", name: "군포시", mayor: "하은호", pNow: "국", elect: "한대희", pElect: "민", electTerm: 2, slogan: "군포유, Good for you", pop: 249770, area: 36.4, gu: 0, eup: 0, myeon: 0, dong: 12, url: "https://www.gunpo.go.kr/" },
+    { region: "남", name: "이천시", mayor: "김경희", pNow: "국", elect: "성수석", pElect: "민", electTerm: 1, slogan: "A.R.T ICHEON", pop: 223635, area: 461.4, gu: 0, eup: 2, myeon: 8, dong: 4, url: "https://www.icheon.go.kr/" },
+    { region: "남", name: "안성시", mayor: "김보라", pNow: "민", elect: "", pElect: "민", electTerm: 3, slogan: "안성맞춤도시 안성", pop: 198631, area: 553.4, gu: 0, eup: 1, myeon: 11, dong: 3, url: "https://www.anseong.go.kr/" },
+    { region: "남", name: "의왕시", mayor: "김성제", pNow: "국", elect: "", pElect: "국", electTerm: 4, slogan: "예스! 의왕 (YES! 의왕)", pop: 163071, area: 54.0, gu: 0, eup: 0, myeon: 0, dong: 6, url: "https://www.uiwang.go.kr/" },
+    { region: "남", name: "양평군", mayor: "전진선", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "사람과 자연, 행복한 양평", pop: 126746, area: 877.8, gu: 0, eup: 1, myeon: 11, dong: 0, url: "https://www.yp21.go.kr/" },
+    { region: "남", name: "여주시", mayor: "이충우", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "", pop: 113541, area: 608.3, gu: 0, eup: 1, myeon: 8, dong: 3, url: "https://www.yeoju.go.kr/" },
+    { region: "남", name: "과천시", mayor: "신계용", pNow: "국", elect: "", pElect: "국", electTerm: 3, slogan: "I am 과천, We are 과천", pop: 80384, area: 35.9, gu: 0, eup: 0, myeon: 0, dong: 7, url: "https://www.gccity.go.kr/" },
+    // ── 경기북부 (10) · 인구순(2026-05) ──
+    { region: "북", name: "고양시", mayor: "이동환", pNow: "국", elect: "민경선", pElect: "민", electTerm: 1, slogan: "미래를 바꾸는 힘! 고양", pop: 1057471, area: 268.1, gu: 3, eup: 0, myeon: 0, dong: 44, url: "https://www.goyang.go.kr/" },
+    { region: "북", name: "남양주시", mayor: "주광덕", pNow: "국", elect: "최현덕", pElect: "민", electTerm: 1, slogan: "상상 더(The) 이상, 남양주", pop: 727717, area: 458.1, gu: 0, eup: 6, myeon: 3, dong: 7, url: "https://www.nyj.go.kr/" },
+    { region: "북", name: "파주시", mayor: "김경일", pNow: "민", elect: "손배찬", pElect: "민", electTerm: 1, slogan: "시민중심! 더 큰 파주!", pop: 532124, area: 672.8, gu: 0, eup: 4, myeon: 9, dong: 10, url: "https://www.paju.go.kr/" },
+    { region: "북", name: "의정부시", mayor: "김동근", pNow: "국", elect: "김원기", pElect: "민", electTerm: 1, slogan: "의정부 행복특별시", pop: 461816, area: 81.5, gu: 0, eup: 0, myeon: 0, dong: 15, url: "https://www.ui4u.go.kr/" },
+    { region: "북", name: "양주시", mayor: "강수현", pNow: "국", elect: "정덕영", pElect: "민", electTerm: 1, slogan: "아름다운 변화, 양주", pop: 296976, area: 310.4, gu: 0, eup: 1, myeon: 4, dong: 7, url: "https://www.yangju.go.kr/" },
+    { region: "북", name: "구리시", mayor: "백경현", pNow: "국", elect: "신동화", pElect: "민", electTerm: 1, slogan: "구리시민행복특별시", pop: 187463, area: 33.3, gu: 0, eup: 0, myeon: 0, dong: 8, url: "https://www.guri.go.kr/" },
+    { region: "북", name: "포천시", mayor: "백영현", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "더 큰 포천, 더 큰 행복", pop: 140464, area: 826.5, gu: 0, eup: 1, myeon: 11, dong: 2, url: "https://www.pocheon.go.kr/" },
+    { region: "북", name: "동두천시", mayor: "박형덕", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "", pop: 86243, area: 95.7, gu: 0, eup: 0, myeon: 0, dong: 8, url: "https://www.ddc.go.kr/" },
+    { region: "북", name: "가평군", mayor: "서태원", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "힐링과 행복, 하나되는 가평특별군", pop: 62044, area: 843.6, gu: 0, eup: 1, myeon: 5, dong: 0, url: "https://www.gp.go.kr/" },
+    { region: "북", name: "연천군", mayor: "김덕현", pNow: "국", elect: "", pElect: "국", electTerm: 2, slogan: "담대한 도전, 새로운 연천", pop: 42868, area: 676.3, gu: 0, eup: 2, myeon: 8, dong: 0, url: "https://www.yeoncheon.go.kr/" }
+  ]
+};
+
+// ── 경기도교육청 산하 25개 교육지원청 ──
+window.GYEONGGI_EDU = {
+  name: "경기도교육청",
+  color: "#00843d",
+  home: "https://www.goe.go.kr/",
+  superintendent: "임태희 (민선 교육감)",
+  slogan: "미래교육의 중심, 새로운 경기교육",
+  note: "경기도교육청 산하 교육지원청 25곳입니다. 일부는 2개 시·군을 묶은 통합 교육지원청입니다.",
+  offices: [
+    { name: "가평교육지원청", url: "https://www.goegp.kr/" },
+    { name: "고양교육지원청", url: "https://www.goegy.kr/" },
+    { name: "광명교육지원청", url: "https://www.goegm.kr/" },
+    { name: "광주하남교육지원청", url: "https://www.goegh.kr/" },
+    { name: "구리남양주교육지원청", url: "https://www.goegn.kr/" },
+    { name: "군포의왕교육지원청", url: "https://www.goegu.kr/" },
+    { name: "김포교육지원청", url: "https://www.gpoe.kr/" },
+    { name: "동두천양주교육지원청", url: "https://www.goedy.kr/" },
+    { name: "부천교육지원청", url: "https://www.goebc.kr/" },
+    { name: "성남교육지원청", url: "https://www.goesn.kr/" },
+    { name: "수원교육지원청", url: "https://www.goesw.kr/" },
+    { name: "시흥교육지원청", url: "https://www.goesh.kr/" },
+    { name: "안산교육지원청", url: "https://www.goeas.kr/" },
+    { name: "안성교육지원청", url: "https://www.goean.kr/" },
+    { name: "안양과천교육지원청", url: "https://www.goeay.kr/" },
+    { name: "양평교육지원청", url: "https://www.goeyp.kr/" },
+    { name: "여주교육지원청", url: "https://www.goeyj.kr/" },
+    { name: "연천교육지원청", url: "https://www.goeyc.kr/" },
+    { name: "용인교육지원청", url: "https://www.goeyi.kr/" },
+    { name: "의정부교육지원청", url: "https://www.goeujb.kr/" },
+    { name: "이천교육지원청", url: "https://www.goeic.kr/" },
+    { name: "파주교육지원청", url: "https://www.goepj.kr/" },
+    { name: "평택교육지원청", url: "https://www.goept.kr/" },
+    { name: "포천교육지원청", url: "https://www.goepc.kr/" },
+    { name: "화성오산교육지원청", url: "https://www.goehs.kr/" }
+  ]
+};

@@ -28,7 +28,7 @@ function parseMat(raw) {
 function outlineItem(raw) {
   const { tag, text, link } = parseMat(raw);
   const tagHtml = tag ? `<span class="bp-tag">${esc(tag)}</span> ` : "";
-  const linkHtml = link ? ` <a class="bp-src" href="${esc(link)}">원문 ›</a>` : "";
+  const linkHtml = link ? ` <a class="bp-src" href="${esc(link)}">바로가기 ›</a>` : "";
   return `<li class="bp-item">${tagHtml}${esc(text)}${linkHtml}</li>`;
 }
 
@@ -52,13 +52,6 @@ function splitItems(items) {
   }
   return { sched, mats };
 }
-// 카드용 요약(링크 제거, 잘리지 않게 전체 반환 — 길면 줄바꿈됨)
-function brief(items) {
-  const { mats } = splitItems(items);
-  if (!mats.length) return "";
-  return mats[0].replace(/\(원문:[^)]*\)/g, "").replace(/https?:\/\/\S+/g, "").trim();
-}
-
 async function loadDaily() {
   try {
     const res = await fetch("정당정책_오늘내용.md?_=" + Date.now(), { cache: "no-store" });
@@ -68,7 +61,6 @@ async function loadDaily() {
 
 // ── 메인 화면: 오늘의 이슈 + 대통령실 + 정당 카드 ──
 function renderHome() {
-  const board0 = e => (e.boards && e.boards[0] && e.boards[0].url) ? e.boards[0].url : (e.home || "#");
   const issues = DAILY["오늘의 이슈"] || [];
   const issueGroups = [
     { key: "대통령실", label: "🏛️ 대통령실", home: "https://www.president.go.kr/" },
@@ -105,59 +97,50 @@ function renderHome() {
         : '<p class="empty">등록된 이슈가 없습니다. (정당정책_오늘내용.md 의 “## 오늘의 이슈”에 [대통령실]/[정책브리핑]/[국회]/[정당] 으로 적어주세요)</p>'}
     </div>`;
 
-  const presBrief = brief(DAILY[PRESIDENT.name]);
-  const presCard = `
-    <div class="pcard org" style="border-top-color:${PRESIDENT.color}" onclick="location.hash='#${PRESIDENT.id}'">
-      <h2 style="color:${PRESIDENT.color}">🏛️ <a class="title-home" href="${PRESIDENT.home}" style="color:${PRESIDENT.color}" onclick="event.stopPropagation()">${PRESIDENT.name}</a></h2>
-      <div class="role">대통령실 브리핑·보도자료 등 공식 자료를 모아봅니다.</div>
-      ${presBrief ? `<a class="snippet" href="${board0(PRESIDENT)}" onclick="event.stopPropagation()">최신 · ${esc(presBrief)}</a>` : ""}
-      <div class="more" style="color:${PRESIDENT.color}">대통령실 자료 보기 →</div>
+  const hero = `
+    <section class="hero">
+      <h2>대한민국 정치, 한 곳에서 봅니다</h2>
+      <p>대통령실·정부·국회·정당의 공식 자료와 매일의 브리핑, 그리고 경기도 31개 시·군과 교육지원청 현황까지 — 흩어져 있는 공식 정보를 한 페이지에 모았습니다. 아래에서 보고 싶은 곳을 골라 들어가세요.</p>
+    </section>`;
+
+  const tiles = `
+    <div class="nav-tiles">
+      <a class="nav-tile" style="--c:#2e3b52" onclick="location.hash='#org'">
+        <div class="nt-ico">🏛️</div>
+        <div class="nt-t">중앙정치 한눈에</div>
+        <div class="nt-s">대통령실·정부(내각)·국회·정당의 조직과 지도부</div>
+      </a>
+      <a class="nav-tile" style="--c:#a06a00" onclick="location.hash='#briefings'">
+        <div class="nt-ico">📰</div>
+        <div class="nt-t">오늘의 브리핑 모아보기</div>
+        <div class="nt-s">각 기관·정당 게시판의 최신 소식을 한눈에</div>
+      </a>
+      <a class="nav-tile" style="--c:#0c4da2" href="https://www.ggc.go.kr/" target="_blank" rel="noopener">
+        <div class="nt-ico">🏛️</div>
+        <div class="nt-t">경기도의회 ↗</div>
+        <div class="nt-s">경기도의회 공식 누리집(의원·의사일정·회의록)</div>
+      </a>
+      <a class="nav-tile" style="--c:${GYEONGGI.color}" onclick="location.hash='#gyeonggi'">
+        <div class="nt-ico">🗺️</div>
+        <div class="nt-t">경기도 31개 시·군</div>
+        <div class="nt-s">단체장·시·군의회 구성·공약</div>
+      </a>
+      <a class="nav-tile" style="--c:${GYEONGGI_EDU.color}" onclick="location.hash='#gyeonggi-edu'">
+        <div class="nt-ico">🎓</div>
+        <div class="nt-t">경기도교육청</div>
+        <div class="nt-s">25개 교육지원청 안내</div>
+      </a>
     </div>`;
 
-  const govBrief = brief(DAILY[GOVERNMENT.name]);
-  const govCard = `
-    <div class="pcard" style="border-top-color:${GOVERNMENT.color}" onclick="location.hash='#${GOVERNMENT.id}'">
-      <h2 style="color:${GOVERNMENT.color}">🏛️ <a class="title-home" href="${GOVERNMENT.pmOffices[0].url}" target="_blank" rel="noopener" style="color:${GOVERNMENT.color}" onclick="event.stopPropagation()">${GOVERNMENT.name}</a></h2>
-      <div class="role"><b>국무총리</b> · ${esc(GOVERNMENT.pm)} <span class="tag">${esc(GOVERNMENT.pmLoc)}</span></div>
-      <div class="role">국무총리·정부부처 장관 명단과 소재지(서울/세종 등)를 봅니다.</div>
-      ${govBrief ? `<a class="snippet" href="${board0(GOVERNMENT)}" onclick="event.stopPropagation()">최신 · ${esc(govBrief)}</a>` : ""}
-      <div class="more" style="color:${GOVERNMENT.color}">내각 명단 보기 →</div>
-    </div>`;
-
-  const asmBrief = brief(DAILY[ASSEMBLY.name]);
-  const asmCard = `
-    <div class="pcard" style="border-top-color:${ASSEMBLY.color}" onclick="location.hash='#${ASSEMBLY.id}'">
-      <h2 style="color:${ASSEMBLY.color}">🏛️ <a class="title-home" href="${ASSEMBLY.home}" style="color:${ASSEMBLY.color}" onclick="event.stopPropagation()">${ASSEMBLY.name}</a></h2>
-      <div class="role">의안·의사일정·국회뉴스 등 공식 자료를 모아봅니다.</div>
-      ${asmBrief ? `<a class="snippet" href="${board0(ASSEMBLY)}" onclick="event.stopPropagation()">최신 · ${esc(asmBrief)}</a>` : ""}
-      <div class="more" style="color:${ASSEMBLY.color}">국회 자료 보기 →</div>
-    </div>`;
-
-  const partyCards = '<div class="grid">' + PARTIES.map(p => {
-    const b = brief(DAILY[p.name]);
-    return `
-    <div class="pcard" style="border-top-color:${p.color}" onclick="location.hash='#${p.id}'">
-      <h2 style="color:${p.color}">${p.home ? `<a class="title-home" href="${p.home}" style="color:${p.color}" onclick="event.stopPropagation()">${p.name}</a>` : p.name}</h2>
-      <div class="role">
-        <div><b>당대표</b> · ${esc(p.leader)}</div>
-        <div><b>원내대표</b> · ${esc(p.floorLeader)}</div>
-        <div><b>최고위원</b> · ${esc(p.supremes)}</div>
-      </div>
-      ${b ? `<a class="snippet" href="${board0(p)}" onclick="event.stopPropagation()">최신 · ${esc(b)}</a>` : ""}
-      <div class="more" style="color:${p.color}">자료 보기 →</div>
-    </div>`; }).join("") + "</div>";
-
-  const orgBtn = `<button class="big-btn" onclick="location.hash='#org'">🏛️ 전체 조직 한눈에 보기 (대통령·정부·국회·정당)</button>`;
-  const orgGrid = `<div class="grid" style="margin-bottom:16px">${govCard}${asmCard}</div>`;
-  view.innerHTML = orgBtn + issueHtml + presCard + orgGrid + partyCards;
-  foot.innerHTML = "카드를 누르면 그날의 자료 요약과 소식 게시판이 한 페이지에 나옵니다. · 지도부 정보 기준일 2026-06-19";
+  view.innerHTML = hero + tiles + issueHtml;
+  foot.innerHTML = "각 메뉴를 누르면 자세한 정보와 그날의 자료가 나옵니다. · 지도부 정보 기준일 2026-06-19";
 }
 
 // ── 상세 화면: 한 정당 ──
 function renderDetail(p) {
   const { sched, mats } = splitItems(DAILY[p.name]);
   const dailyHtml = mats.length
-    ? "<ul>" + mats.map(t => `<li class="item">${linkify(t)}</li>`).join("") + "</ul>"
+    ? `<ul class="bp-list">${mats.map(outlineItem).join("")}</ul>`
     : '<p class="empty">등록된 자료가 없습니다.</p>';
   const schedHtml = sched.length
     ? "<ul>" + sched.map(t => `<li class="item">📅 ${linkify(t)}</li>`).join("") + "</ul>"
@@ -224,7 +207,7 @@ function renderGovernment(g) {
   }).join("");
   const { sched, mats } = splitItems(DAILY[g.name]);
   const dailyHtml = mats.length
-    ? "<ul>" + mats.map(t => `<li class="item">${linkify(t)}</li>`).join("") + "</ul>"
+    ? `<ul class="bp-list">${mats.map(outlineItem).join("")}</ul>`
     : '<p class="empty">등록된 자료가 없습니다.</p>';
   const schedHtml = sched.length
     ? "<ul>" + sched.map(t => `<li class="item">📅 ${linkify(t)}</li>`).join("") + "</ul>"
@@ -236,7 +219,7 @@ function renderGovernment(g) {
       <h2 style="color:${g.color};border-color:${g.color}">${g.name}</h2>
       <div class="sec-title">국무총리</div>
       <table class="lead-table">
-        <tr><th>국무총리</th><td>${esc(g.pm)}<span class="tag">${esc(g.pmLoc)}</span></td></tr>
+        <tr><th>국무총리</th><td>${esc(g.pm)}<span class="tag">${esc(g.pmLoc)}</span>${g.pmPrev ? `<div class="prev">${esc(g.pmPrev)}</div>` : ""}</td></tr>
       </table>
       <div class="sec-title">바로가기</div>
       <div class="boards">
@@ -374,14 +357,20 @@ function renderOrg() {
      ${minGroups}`);
 
   // 3) 국회
-  const blocCards = ASSEMBLY.negoBlocs.map(b => `
+  const blocCards = ASSEMBLY.negoBlocs.map(b => {
+    const party = PARTIES.find(p => p.name === b.party);
+    const home = b.url || (party && party.home);
+    const title = home
+      ? `<a class="ig-home" href="${home}" target="_blank" rel="noopener" style="color:${ASSEMBLY.color}">${esc(b.party)} <span class="ig-ext">↗</span></a>`
+      : esc(b.party);
+    return `
     <div class="ig-card" style="--c:${ASSEMBLY.color}">
-      <div class="ig-card-t">${esc(b.party)}</div>
+      <div class="ig-card-t">${title}</div>
       <div class="ig-card-s">원내대표 · ${esc(b.rep)}</div>
       <div class="ig-card-v">수석부대표 · ${esc(b.deputy)}</div>
-    </div>`).join("");
+    </div>`; }).join("");
   const comChips = ASSEMBLY.committees.map(c =>
-    `<a class="ig-chip" href="${c.url}" target="_blank" rel="noopener">${esc(c.name)}</a>`).join("");
+    `<a class="ig-chip" href="${c.url}" target="_blank" rel="noopener">${esc(c.name)}${c.head ? ` <span class="ig-chip-h">${esc(c.head)}</span>` : ""}</a>`).join("");
   const asmNode = igPanel(ASSEMBLY.name, ASSEMBLY.home, ASSEMBLY.color,
     `👤 국회의장 · ${esc(ASSEMBLY.speaker)}`,
     `<div class="ig-sub">부의장 · ${esc(ASSEMBLY.viceSpeakers)}</div>
@@ -425,43 +414,120 @@ function renderOrg() {
   ].map(s => `• ${s}`).join("<br>");
 }
 
-// ── 브리핑·모두발언 모아보기 ──
-// 브리핑 모아보기를 개조식 텍스트(.md)로 — 날짜·주체 포함
-function buildBriefingText() {
-  const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES];
-  const today = new Date().toLocaleDateString("ko-KR",
-    { year: "numeric", month: "long", day: "numeric", weekday: "long" });
-  let out = `${today}\n# 오늘의 브리핑\n\n`;
-  let any = false;
-  for (const e of order) {
-    const { mats } = splitItems(DAILY[e.name]);
-    if (!mats.length) continue;
-    any = true;
-    out += `## ${e.name}\n`;
-    for (const raw of mats) {
-      const { tag, text, link } = parseMat(raw);
-      const datePart = tag ? `[${tag}] ` : "";
-      out += `- ${datePart}${text}${link ? ` (원문: ${link})` : ""}\n`;
-    }
-    out += "\n";
-  }
-  if (!any) out += "등록된 브리핑이 없습니다.\n";
-  return out;
+// 시장 소속 정당 → 카드 바탕색(흐리게). 민주=파랑, 국힘=빨강, 그 외=기본
+function partyTint(party) {
+  // 세련된 표현: 카드는 흰 바탕, 왼쪽에 가는 당색 강조선 + 아주 옅은 색조
+  if (party === "민") return "background:#fbfdff;border-left:4px solid #2b6cb0";
+  if (party === "국") return "background:#fffbfb;border-left:4px solid #c0392b";
+  return "";
 }
-function downloadBriefings() {
-  const blob = new Blob([buildBriefingText()], { type: "text/markdown;charset=utf-8" });
-  const date = new Date().toISOString().slice(0, 10);
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `브리핑모아보기_${date}.md`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
+
+// ── 상세 화면: 경기도 31개 시·군 ──
+function renderGyeonggi() {
+  const g = window.GYEONGGI;
+  const newTerm = location.search.includes("term=9") || new Date() >= new Date(2026, 6, 1); // 2026-07-01 0시(로컬)부터 true. ?term=9 로 미리보기
+  const manStr = n => (n / 10000).toFixed(1) + "만";
+  const adminStr = c => {
+    const p = [];
+    if (c.gu) p.push(c.gu + "구");
+    if (c.eup) p.push(c.eup + "읍");
+    if (c.myeon) p.push(c.myeon + "면");
+    if (c.dong) p.push(c.dong + "동");
+    return p.join("·");
+  };
+  const P = { 민: ["더불어민주당", "#2b6cb0"], 국: ["국민의힘", "#c0392b"], 진: ["진보당", "#b81d3e"], 개: ["개혁신당", "#d97a34"], 무: ["무소속", "#6b7280"], 기본: ["기본소득당", "#16a085"], 사민: ["사회민주당", "#8e44ad"], 정의: ["정의당", "#d4a017"], 녹정: ["녹색정의당", "#2e8b57"], 노동: ["노동당", "#a93226"] };
+  const seatStr = obj => Object.entries(obj).map(([p, n]) => `<span style="color:${(P[p] || ["", "#444"])[1]}">${(P[p] || [p])[0]} ${n}</span>`).join(" · ");
+  const total = obj => Object.values(obj).reduce((a, b) => a + b, 0);
+  const memChips = arr => arr.map(m => `<span class="cm-chip" style="border-color:${(P[m.p] || ["", "#ccc"])[1]}">${esc(m.n)}<small>${esc(m.d || "")}</small></span>`).join("");
+  const councilHtml = c => {
+    if (!newTerm) return "";
+    const d = window.GG_COUNCIL && window.GG_COUNCIL[c.name];
+    if (!d) return "";
+    return `<details class="gg-council">
+      <summary>🏛 의회 구성 · 도의원 ${total(d.prov)} · 시·군의원 ${total(d.basic)}</summary>
+      <div class="cm-block"><div class="cm-head">도의원 <span class="cm-seats">${seatStr(d.prov)}</span></div><div class="cm-list">${memChips(d.provList)}</div></div>
+      <div class="cm-block"><div class="cm-head">시·군의원 <span class="cm-seats">${seatStr(d.basic)}</span></div><div class="cm-list">${memChips(d.basicList)}</div></div>
+      <div class="cm-src">${esc(d.src || "")}</div>
+    </details>`;
+  };
+  const cityCard = c => {
+    const changed = !!c.elect;
+    const mayorName = newTerm ? (c.elect || c.mayor) : c.mayor;
+    const party = newTerm ? c.pElect : c.pNow;       // 표시 중인 시장의 정당으로 색
+    const electLine = (!newTerm && changed)
+      ? `<div class="gg-elect">→ 7·1 ${esc(c.elect)} (당선)</div>` : "";
+    const termLabel = t => t === 1 ? "초선" : t === 2 ? "재선" : `${t}선`;
+    const termStr = (newTerm && c.electTerm) ? ` (${termLabel(c.electTerm)})` : "";
+    const showSlogan = c.slogan && !(newTerm && changed);
+    const slogan = showSlogan ? `<div class="gg-slogan">“${esc(c.slogan)}”</div>` : "";
+    const stat = (c.pop != null)
+      ? `<div class="gg-stat">👥 ${manStr(c.pop)} · 📐 ${c.area}㎢</div>
+         <div class="gg-stat">🏛 ${adminStr(c)}</div>` : "";
+    return `<div class="gg-cell">
+      <a class="gg-card" style="${partyTint(party)}" href="${esc(c.url)}" target="_blank" rel="noopener">
+        <div class="gg-name">${esc(c.name)} <span class="ig-ext">↗</span></div>
+        <div class="gg-mayor">${c.name.endsWith("군") ? "군수" : "시장"} · ${esc(mayorName)}${termStr}</div>
+        ${stat}${electLine}${slogan}
+      </a>${councilHtml(c)}
+    </div>`;
+  };
+  const ggNote = newTerm
+    ? "시장·군수는 2026-07-01 취임한 민선9기 기준입니다. 시장이 바뀐 시·군은 새 시정 슬로건 확정 전까지 슬로건을 비워 두었습니다. 바탕색=시장 소속 정당(파랑 더불어민주당·빨강 국민의힘)."
+    : g.note;
+  view.innerHTML = `<div class="detail" style="--c:${g.color}">
+      <button class="back" onclick="location.hash=''">← 메인으로</button>
+      <h2 style="color:${g.color};border-color:${g.color}"><a class="title-home" href="${g.home}" target="_blank" rel="noopener" style="color:${g.color}">경기도 ↗</a></h2>
+      <div class="gg-head">👤 도지사 · ${esc(g.gov)}${g.slogan ? ` <span class="gg-org-slogan">“${esc(g.slogan)}”</span>` : ""}</div>
+      <div class="sec-title">경기남부 <span class="gt-count">${g.cities.filter(c => c.region === "남").length}곳</span></div>
+      <div class="gg-grid">${g.cities.filter(c => c.region === "남").map(cityCard).join("")}</div>
+      <div class="sec-title">경기북부 <span class="gt-count">${g.cities.filter(c => c.region === "북").length}곳</span></div>
+      <div class="gg-grid">${g.cities.filter(c => c.region === "북").map(cityCard).join("")}</div>
+      <p class="note">${esc(ggNote)}</p>
+    </div>`;
+  foot.innerHTML = "시·군 카드를 누르면 해당 시·군 공식 홈페이지로 이동합니다. · 시장은 2026-07-01부터 민선9기 당선자로 자동 전환됩니다.";
+}
+
+// ── 상세 화면: 경기도교육청 교육지원청 ──
+function renderGyeonggiEdu() {
+  const e = window.GYEONGGI_EDU;
+  const chips = e.offices.map(o =>
+    `<a class="edu-chip" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.name)} <span class="ig-ext">↗</span></a>`).join("");
+  view.innerHTML = `<div class="detail" style="--c:${e.color}">
+      <button class="back" onclick="location.hash=''">← 메인으로</button>
+      <h2 style="color:${e.color};border-color:${e.color}"><a class="title-home" href="${e.home}" target="_blank" rel="noopener" style="color:${e.color}">경기도교육청 ↗</a></h2>
+      <div class="gg-head">👤 교육감 · ${esc(e.superintendent)}${e.slogan ? ` <span class="gg-org-slogan">“${esc(e.slogan)}”</span>` : ""}</div>
+      <div class="sec-title">교육지원청 <span class="gt-count">${e.offices.length}곳</span></div>
+      <div class="edu-grid">${chips}</div>
+      <p class="note">${esc(e.note)}</p>
+    </div>`;
+  foot.innerHTML = "교육지원청을 누르면 해당 교육지원청 공식 홈페이지로 이동합니다.";
+}
+
+// ── 브리핑·모두발언 모아보기 ──
+// 기관별 오늘 자료 전체 (안내성 '확인 필요' 항목은 제외)
+function briefMats(name) {
+  const { mats } = splitItems(DAILY[name]);
+  return mats.map(parseMat).filter(m => m.text && !/확인\s*필요/.test(m.text));
 }
 function renderBriefings() {
   const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES];
-  const secs = order.map(e => entitySection(e, { matsOnly: true, outline: true })).join("");
+  const secs = order.map(e => {
+    const list = briefMats(e.name);
+    if (!list.length) return "";
+    const title = e.home
+      ? `<a class="title-home" href="${e.home}" style="color:${e.color}">${esc(e.name)}</a>`
+      : esc(e.name);
+    const items = list.map(m => {
+      const chip = m.tag ? `<span class="bp-tag">${esc(m.tag)}</span> ` : "";
+      const body = m.link
+        ? `<a class="bp-link" href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.text)}</a>`
+        : esc(m.text);
+      return `<li class="bp-item">${chip}${body}</li>`;
+    }).join("");
+    return `<div class="all-sec" style="border-left:4px solid ${e.color}">
+        <h3 style="color:${e.color}">${title}</h3>
+        <ul class="bp-list">${items}</ul></div>`;
+  }).join("");
   const todayStr = new Date().toLocaleDateString("ko-KR",
     { year: "numeric", month: "long", day: "numeric", weekday: "long" });
   view.innerHTML = `<div class="detail">
@@ -470,17 +536,17 @@ function renderBriefings() {
       <h2>📰 오늘의 브리핑</h2>
       <div class="act-row">
         <button class="reload" onclick="refresh()">새로고침</button>
-        <button class="print-btn" onclick="downloadBriefings()">⬇️ 파일로 저장 (.md)</button>
-        <button class="print-btn" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
       </div>
       ${secs || '<p class="empty">등록된 브리핑이 없습니다.</p>'}
     </div>`;
-  foot.innerHTML = "각 기관·정당의 최신 브리핑·모두발언 요약을 한 곳에 모았습니다. · 날짜·주체가 함께 표기됩니다. · '파일로 저장'으로 개조식 요약본을 내려받을 수 있습니다.";
+  foot.innerHTML = "각 기관·정당 게시판에서 확인한 오늘 자료(보도자료·브리핑·모두발언)를 모아 요약했습니다. · ‘한글 문서로 저장’을 누르면 한글/워드에서 열리는 .doc 파일로 내려받습니다.";
 }
 
 function route() {
   const id = location.hash.replace("#", "");
   if (id === "org") { renderOrg(); window.scrollTo(0, 0); return; }
+  if (id === "gyeonggi") { renderGyeonggi(); window.scrollTo(0, 0); return; }
+  if (id === "gyeonggi-edu") { renderGyeonggiEdu(); window.scrollTo(0, 0); return; }
   if (id === "briefings") { renderBriefings(); window.scrollTo(0, 0); return; }
   if (id === GOVERNMENT.id) { renderGovernment(GOVERNMENT); window.scrollTo(0, 0); return; }
   if (id === ASSEMBLY.id) { renderAssembly(ASSEMBLY); window.scrollTo(0, 0); return; }

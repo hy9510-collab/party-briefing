@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>한눈에 보는 정치 브리핑</title>
+<title>한눈에 보는 정부·국회·경기</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   /* 한글은 단어 단위로 줄바꿈, 긴 URL 등은 강제 줄바꿈 → 글자 잘림 방지 */
@@ -16,6 +16,7 @@
   .update-btn { background: #3a6df0; color: #fff; padding: 9px 14px; font-size: 14px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; white-space: nowrap; }
   .update-btn:hover { background: #2f5bd0; }
   .update-btn:disabled { background: #9bb4ef; cursor: default; }
+  header .subtitle { color: #555; font-size: 14.5px; margin: 6px 0 2px; line-height: 1.5; }
   header .date { color: #666; font-size: 14px; margin: 4px 0 2px; }
   header .updated { color: #999; font-size: 12px; margin-bottom: 18px; }
 
@@ -27,12 +28,53 @@
   .mini-btn:hover { background: #fff3d6; }
   .big-btn { display: block; width: 100%; background: #2e3b52; color: #fff; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 12px; cursor: pointer; margin-bottom: 16px; }
   .big-btn:hover { background: #1f2a3d; }
+  .gg-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .gg-btn { flex: 1 1 220px; background: #fff; color: var(--c, #0c4da2); border: 2px solid var(--c, #0c4da2); padding: 13px; font-size: 14.5px; font-weight: 700; border-radius: 12px; cursor: pointer; }
+  .gg-btn:hover { background: var(--c, #0c4da2); color: #fff; }
+  .gg-head { font-size: 14px; font-weight: 600; color: #333; margin: 6px 0 4px; }
+  .gg-org-slogan { font-weight: 600; color: #0c4da2; margin-left: 4px; }
+  .gg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 9px; margin-top: 8px; }
+  .gg-card { display: block; background: #f7f8fa; border: 1px solid #e2e6ec; border-radius: 10px; padding: 10px 11px; text-decoration: none; color: #1a2333; }
+  .gg-card:hover { filter: brightness(0.97); box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+  .gg-name { font-size: 14.5px; font-weight: 700; }
+  .gg-mayor { font-size: 13px; margin-top: 3px; }
+  .gg-stat { font-size: 12px; color: #444; margin-top: 3px; }
+  .gg-elect { font-size: 12px; color: #b03030; margin-top: 2px; font-weight: 600; }
+  .gg-slogan { font-size: 12px; color: #555; margin-top: 3px; }
+  .gg-cell { display: flex; flex-direction: column; }
+  .gg-cell .gg-card { flex: 1; }
+  .gg-council { margin-top: 4px; background: #fbfcfe; border: 1px solid #e2e6ec; border-radius: 8px; font-size: 12px; }
+  .gg-council > summary { cursor: pointer; padding: 6px 9px; font-weight: 600; color: #2a3445; list-style: none; }
+  .gg-council > summary::-webkit-details-marker { display: none; }
+  .gg-council[open] > summary { border-bottom: 1px solid #eef0f4; }
+  .cm-block { padding: 7px 9px; }
+  .cm-head { font-weight: 700; color: #1a2333; margin-bottom: 4px; }
+  .cm-seats { font-weight: 600; margin-left: 4px; }
+  .cm-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  .cm-chip { border: 1px solid #ccc; border-left-width: 3px; border-radius: 5px; padding: 1px 5px; background: #fff; white-space: nowrap; }
+  .cm-chip small { color: #888; margin-left: 3px; font-size: 10.5px; }
+  .cm-src { padding: 5px 9px 8px; color: #8a93a0; font-size: 11px; }
+  .edu-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .edu-chip { font-size: 13px; background: #eaf5ee; color: #0a6e34; border: 1px solid #b8dcc6; border-radius: 8px; padding: 7px 11px; text-decoration: none; font-weight: 600; }
+  .edu-chip:hover { background: #00843d; color: #fff; }
   .all-sec { background: #fff; border-radius: 12px; padding: 14px 16px; margin-top: 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.05); }
   .all-sec h3 { font-size: 17px; margin-bottom: 6px; }
   .all-more { font-size: 13px; font-weight: 600; color: #3a6df0; cursor: pointer; }
   .org-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   .org-chip { font-size: 12.5px; background: #eef1f6; color: #334; border-radius: 7px; padding: 4px 9px; }
   .lead-table td.bloc-note { font-size: 12px; color: #888; }
+  /* 메인 소개(히어로) + 이동 타일 */
+  .hero { background: linear-gradient(135deg, #2e3b52 0%, #3a4a6a 100%); color: #fff; border-radius: 16px; padding: 26px 24px; margin-bottom: 18px; }
+  .hero h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 8px; }
+  .hero p { font-size: 14.5px; line-height: 1.65; color: #dfe5f0; }
+  @media (max-width: 520px) { .hero h2 { font-size: 19px; } }
+  .nav-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  @media (max-width: 520px) { .nav-tiles { grid-template-columns: 1fr; } }
+  .nav-tile { display: block; background: #fff; border: 1px solid #e5e8ee; border-left: 5px solid var(--c, #2e3b52); border-radius: 13px; padding: 16px 18px; cursor: pointer; text-decoration: none; color: #1a1a1a; transition: box-shadow .15s, transform .15s; }
+  .nav-tile:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); transform: translateY(-2px); }
+  .nt-ico { font-size: 22px; }
+  .nt-t { font-size: 16.5px; font-weight: 700; margin: 4px 0 3px; color: var(--c, #2e3b52); }
+  .nt-s { font-size: 13px; color: #667; line-height: 1.5; }
   .issue-box ul { list-style: none; }
   .issue-box li.item { border-bottom: 1px solid #f1e6c8; padding: 8px 0; line-height: 1.55; }
   .issue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
@@ -54,6 +96,8 @@
   .pcard:hover { transform: translateY(-2px); }
   .pcard h2 { font-size: 18px; margin-bottom: 10px; }
   .pcard .role { font-size: 13px; color: #444; line-height: 1.6; }
+  .pcard .pres-chief { margin-top: 8px; font-size: 13px; font-weight: 600; color: #1a4f8a; line-height: 1.5; }
+  .pcard .pres-chief small { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 400; color: #777; }
   .pcard .role b { color: #111; }
   .pcard .snippet { margin-top: 10px; font-size: 12.5px; color: #555; background: #f7f8fa; border-radius: 8px; padding: 7px 9px; line-height: 1.5; }
   .pcard a.snippet { display: block; text-decoration: none; }
@@ -112,6 +156,8 @@
   .bp-tag { display: inline-block; font-size: 11.5px; font-weight: 700; color: #4a5568; background: #eef1f6; border-radius: 6px; padding: 1px 7px; margin-right: 4px; vertical-align: middle; }
   .bp-src { font-size: 12.5px; font-weight: 600; color: #3a6df0; text-decoration: none; white-space: nowrap; margin-left: 4px; }
   .bp-src:hover { text-decoration: underline; }
+  .bp-link { color: #1a4f8a; text-decoration: none; font-weight: 600; }
+  .bp-link:hover { text-decoration: underline; }
   /* 전체 조직 인포그래픽 */
   .ig { display: flex; flex-direction: column; }
   .ig-link { width: 3px; height: 20px; background: #d4d9e2; margin: 0 auto; }
@@ -134,6 +180,7 @@
   .ig-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .ig-chip { font-size: 12px; background: #eef1f6; color: #445; border-radius: 7px; padding: 4px 9px; text-decoration: none; }
   a.ig-chip:hover { background: #dde3ee; text-decoration: underline; }
+  .ig-chip-h { color: #6b5b95; font-weight: 600; margin-left: 3px; }
   .ig-note { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.5; }
   .loc-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
   .loc-tag.loc-세종 { background: #e3f0e9; color: #2e7d5b; }
@@ -163,9 +210,10 @@
   <div class="wrap">
     <header>
       <div class="top-row">
-        <h1>한눈에 보는 정치 브리핑</h1>
+        <h1>한눈에 보는 정부·국회·경기</h1>
         <button id="updateBtn" class="update-btn">🔄 지금 업데이트</button>
       </div>
+      <p class="subtitle">대통령실·정부·국회·정당과 경기도 조직·정책 소식을 매일 한 곳에서</p>
       <p class="date" id="date"></p>
       <p class="updated" id="updated"></p>
     </header>
@@ -173,7 +221,8 @@
     <p class="note" id="foot"></p>
   </div>
 
-<script src="data.js?v=47"></script>
-<script src="app.js?v=47"></script>
+<script src="data.js?v=74"></script>
+<script src="council.js?v=74"></script>
+<script src="app.js?v=74"></script>
 </body>
 </html>
