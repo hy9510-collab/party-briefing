@@ -458,7 +458,7 @@ function renderGyeonggi() {
       ? `<div class="gg-elect">→ 7·1 ${esc(c.elect)} (당선)</div>` : "";
     const termLabel = t => t === 1 ? "초선" : t === 2 ? "재선" : `${t}선`;
     const termStr = (newTerm && c.electTerm) ? ` (${termLabel(c.electTerm)})` : "";
-    const showSlogan = c.slogan && !(newTerm && changed);
+    const showSlogan = !!c.slogan;
     const slogan = showSlogan ? `<div class="gg-slogan">“${esc(c.slogan)}”</div>` : "";
     const stat = (c.pop != null)
       ? `<div class="gg-stat">👥 ${manStr(c.pop)} · 📐 ${c.area}㎢</div>
@@ -472,7 +472,7 @@ function renderGyeonggi() {
     </div>`;
   };
   const ggNote = newTerm
-    ? "시장·군수는 2026-07-01 취임한 민선9기 기준입니다. 시장이 바뀐 시·군은 새 시정 슬로건 확정 전까지 슬로건을 비워 두었습니다. 바탕색=시장 소속 정당(파랑 더불어민주당·빨강 국민의힘)."
+    ? "시장·군수·슬로건은 2026-07-06 기준 민선9기입니다. 재선 단체장은 새 임기의 시정 슬로건을, 새로 취임한 단체장은 취임식에서 밝힌 민선9기 구호를 각 시·군 홈페이지에서 확인해 넣었습니다. 아직 새 슬로건을 공표하지 않은 일부(평택 등)는 비워 두었습니다. 바탕색=단체장 소속 정당(파랑 더불어민주당·빨강 국민의힘)."
     : g.note;
   view.innerHTML = `<div class="detail" style="--c:${g.color}">
       <button class="back" onclick="location.hash=''">← 메인으로</button>
