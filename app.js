@@ -496,9 +496,9 @@ function renderBriefings() {
     const list = briefMats(e.name);
     if (!list.length) return "";
     const title = e.home
-      ? `<a class="title-home" href="${e.home}" style="color:${e.color}">${esc(e.name)}</a>`
+      ? `<a class="title-home" href="${e.home}" target="_blank" rel="noopener" style="color:${e.color}">${esc(e.name)}</a>`
       : esc(e.name);
-    const items = list.map(m => {
+    const items = list.slice(0, 2).map(m => {
       const chip = m.tag ? `<span class="bp-tag">${esc(m.tag)}</span> ` : "";
       const body = m.link
         ? `<a class="bp-link" href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.text)}</a>`
