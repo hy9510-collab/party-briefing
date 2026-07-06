@@ -71,28 +71,18 @@ function renderHome() {
     <div class="nav-tiles">
       <a class="nav-tile" style="--c:#2e3b52" onclick="location.hash='#org'">
         <div class="nt-ico">🏛️</div>
-        <div class="nt-t">중앙정치 한눈에</div>
+        <div class="nt-t">중앙 조직</div>
         <div class="nt-s">대통령실·정부(내각)·국회·정당의 조직과 지도부</div>
       </a>
       <a class="nav-tile" style="--c:#a06a00" onclick="location.hash='#briefings'">
         <div class="nt-ico">📰</div>
-        <div class="nt-t">오늘의 브리핑 모아보기</div>
+        <div class="nt-t">기관별 소식</div>
         <div class="nt-s">각 기관·정당 게시판의 최신 소식을 한눈에</div>
       </a>
-      <a class="nav-tile" style="--c:#0c4da2" href="https://www.ggc.go.kr/" target="_blank" rel="noopener">
-        <div class="nt-ico">🏛️</div>
-        <div class="nt-t">경기도의회 ↗</div>
-        <div class="nt-s">경기도의회 공식 누리집(의원·의사일정·회의록)</div>
-      </a>
-      <a class="nav-tile" style="--c:${GYEONGGI.color}" onclick="location.hash='#gyeonggi'">
+      <a class="nav-tile" style="--c:${GYEONGGI.color}" onclick="location.hash='#gyeonggi-org'">
         <div class="nt-ico">🗺️</div>
-        <div class="nt-t">경기도 31개 시·군</div>
-        <div class="nt-s">단체장·시·군의회 구성·공약</div>
-      </a>
-      <a class="nav-tile" style="--c:${GYEONGGI_EDU.color}" onclick="location.hash='#gyeonggi-edu'">
-        <div class="nt-ico">🎓</div>
-        <div class="nt-t">경기도교육청</div>
-        <div class="nt-s">25개 교육지원청 안내</div>
+        <div class="nt-t">경기도 조직</div>
+        <div class="nt-s">경기도의회 · 경기도 31개 시·군 · 경기도교육청</div>
       </a>
     </div>`;
 
@@ -386,6 +376,33 @@ function partyTint(party) {
   return "";
 }
 
+// ── 묶음 화면: 경기도 조직 (경기도의회·경기도 31개 시·군·경기도교육청) ──
+function renderGyeonggiOrg() {
+  view.innerHTML = `
+    <div class="detail">
+      <button class="back" onclick="location.hash=''">← 메인으로</button>
+      <h2>🗺️ 경기도 조직</h2>
+      <div class="nav-tiles">
+        <a class="nav-tile" style="--c:#0c4da2" href="https://www.ggc.go.kr/" target="_blank" rel="noopener">
+          <div class="nt-ico">🏛️</div>
+          <div class="nt-t">경기도의회 ↗</div>
+          <div class="nt-s">경기도의회 공식 누리집(의원·의사일정·회의록)</div>
+        </a>
+        <a class="nav-tile" style="--c:${GYEONGGI.color}" onclick="location.hash='#gyeonggi'">
+          <div class="nt-ico">🗺️</div>
+          <div class="nt-t">경기도 31개 시·군</div>
+          <div class="nt-s">단체장·시·군의회 구성·공약</div>
+        </a>
+        <a class="nav-tile" style="--c:${GYEONGGI_EDU.color}" onclick="location.hash='#gyeonggi-edu'">
+          <div class="nt-ico">🎓</div>
+          <div class="nt-t">경기도교육청</div>
+          <div class="nt-s">25개 교육지원청 안내</div>
+        </a>
+      </div>
+    </div>`;
+  foot.innerHTML = "경기도 조직은 경기도의회·경기도(31개 시·군)·경기도교육청 세 곳으로 나뉩니다. 항목을 눌러 자세히 보세요.";
+}
+
 // ── 상세 화면: 경기도 31개 시·군 ──
 function renderGyeonggi() {
   const g = window.GYEONGGI;
@@ -439,7 +456,7 @@ function renderGyeonggi() {
     ? "시장·군수·슬로건은 2026-07-06 기준 민선9기입니다. 재선 단체장은 새 임기의 시정 슬로건을, 새로 취임한 단체장은 취임식에서 밝힌 민선9기 구호를 각 시·군 홈페이지에서 확인해 넣었습니다. 아직 새 슬로건을 공표하지 않은 일부(평택 등)는 비워 두었습니다. 바탕색=단체장 소속 정당(파랑 더불어민주당·빨강 국민의힘)."
     : g.note;
   view.innerHTML = `<div class="detail" style="--c:${g.color}">
-      <button class="back" onclick="location.hash=''">← 메인으로</button>
+      <button class="back" onclick="location.hash='#gyeonggi-org'">← 경기도 조직</button>
       <h2 style="color:${g.color};border-color:${g.color}"><a class="title-home" href="${g.home}" target="_blank" rel="noopener" style="color:${g.color}">경기도 ↗</a></h2>
       <div class="gg-head">👤 도지사 · ${esc(g.gov)}${g.slogan ? ` <span class="gg-org-slogan">“${esc(g.slogan)}”</span>` : ""}</div>
       <div class="sec-title">경기남부 <span class="gt-count">${g.cities.filter(c => c.region === "남").length}곳</span></div>
@@ -457,7 +474,7 @@ function renderGyeonggiEdu() {
   const chips = e.offices.map(o =>
     `<a class="edu-chip" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.name)} <span class="ig-ext">↗</span></a>`).join("");
   view.innerHTML = `<div class="detail" style="--c:${e.color}">
-      <button class="back" onclick="location.hash=''">← 메인으로</button>
+      <button class="back" onclick="location.hash='#gyeonggi-org'">← 경기도 조직</button>
       <h2 style="color:${e.color};border-color:${e.color}"><a class="title-home" href="${e.home}" target="_blank" rel="noopener" style="color:${e.color}">경기도교육청 ↗</a></h2>
       <div class="gg-head">👤 교육감 · ${esc(e.superintendent)}${e.slogan ? ` <span class="gg-org-slogan">“${esc(e.slogan)}”</span>` : ""}</div>
       <div class="sec-title">교육지원청 <span class="gt-count">${e.offices.length}곳</span></div>
@@ -516,6 +533,7 @@ function route() {
   if (id === "org") { renderOrg(); window.scrollTo(0, 0); return; }
   if (id === "gyeonggi") { renderGyeonggi(); window.scrollTo(0, 0); return; }
   if (id === "gyeonggi-edu") { renderGyeonggiEdu(); window.scrollTo(0, 0); return; }
+  if (id === "gyeonggi-org") { renderGyeonggiOrg(); window.scrollTo(0, 0); return; }
   if (id === "briefings") { renderBriefings(); window.scrollTo(0, 0); return; }
   if (id === GOVERNMENT.id) { renderGovernment(GOVERNMENT); window.scrollTo(0, 0); return; }
   if (id === ASSEMBLY.id) { renderAssembly(ASSEMBLY); window.scrollTo(0, 0); return; }
