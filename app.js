@@ -517,11 +517,11 @@ function renderBriefings() {
   view.innerHTML = `<div class="detail">
       <button class="back" onclick="location.hash=''">← 전체 보기</button>
       <div class="brief-date">${todayStr}</div>
-      <h2>📰 오늘의 브리핑</h2>
+      <h2>📰 기관별 소식</h2>
       <div class="act-row">
         <button class="reload" onclick="refresh()">새로고침</button>
       </div>
-      <div class="sec-title">소식 게시판 바로가기</div>
+      <div class="sec-title">기관별 소식 게시판 바로가기</div>
       <div class="boards">${boardLinks}</div>
       ${secs || '<p class="empty">등록된 브리핑이 없습니다.</p>'}
     </div>`;
