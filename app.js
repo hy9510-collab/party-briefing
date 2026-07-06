@@ -528,6 +528,9 @@ function renderBriefings() {
         <h3 style="color:${e.color}">${title}</h3>
         <ul class="bp-list">${items}</ul></div>`;
   }).join("");
+  const boardLinks = (window.BRIEF_BOARDS || [])
+    .map(b => `<a href="${b.url}" target="_blank" rel="noopener" style="color:${b.color}">${esc(b.name)} ↗</a>`)
+    .join("");
   const todayStr = new Date().toLocaleDateString("ko-KR",
     { year: "numeric", month: "long", day: "numeric", weekday: "long" });
   view.innerHTML = `<div class="detail">
@@ -537,6 +540,8 @@ function renderBriefings() {
       <div class="act-row">
         <button class="reload" onclick="refresh()">새로고침</button>
       </div>
+      <div class="sec-title">소식 게시판 바로가기</div>
+      <div class="boards">${boardLinks}</div>
       ${secs || '<p class="empty">등록된 브리핑이 없습니다.</p>'}
     </div>`;
   foot.innerHTML = "각 기관·정당 게시판에서 확인한 오늘 자료(보도자료·브리핑·모두발언)를 모아 요약했습니다. · ‘한글 문서로 저장’을 누르면 한글/워드에서 열리는 .doc 파일로 내려받습니다.";

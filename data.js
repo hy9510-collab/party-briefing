@@ -182,6 +182,21 @@ window.PARTIES = [
   }
 ];
 
+// ── 오늘의 브리핑 페이지 '소식 게시판 바로가기' 링크 (각 기관 공식 소식/보도자료 게시판) ──
+// URL은 2026-07-06 각 기관 공식 사이트에서 접속 확인. 게시판이 바뀌면 여기만 고치면 됩니다.
+window.BRIEF_BOARDS = [
+  { name: "대통령실", color: "#1a4f8a", url: "https://www.president.go.kr/briefings" },
+  { name: "정부 (내각)", color: "#2e7d5b", url: "https://www.opm.go.kr/opm/news/press-release.do" },
+  { name: "국회", color: "#6b5b95", url: "https://www.naon.go.kr/" },
+  { name: "더불어민주당", color: "#0050a0", url: "https://theminjoo.kr/main/sub/news/list.php?brd=11&cate=105" },
+  { name: "조국혁신당", color: "#0073cf", url: "https://rebuildingkoreaparty.kr/news/press-release" },
+  { name: "국민의힘", color: "#e61e2b", url: "https://www.peoplepowerparty.kr/news/comment/BBSDD0001" },
+  { name: "개혁신당", color: "#ff7920", url: "https://www.reformparty.kr/briefing" },
+  { name: "경기도의회", color: "#0c4da2", url: "https://www.ggc.go.kr/site/main/xb/lwmkr/lawmakerpressrelease" },
+  { name: "경기도청", color: "#0c4da2", url: "https://gnews.gg.go.kr/briefing/brief_gongbo.do" },
+  { name: "경기도교육청", color: "#00843d", url: "https://www.goe.go.kr/goe/na/ntt/selectNttList.do?mi=10102&bbsId=1922" }
+];
+
 // ── 경기도 31개 시·군 (시장: 민선8기 현직 2022 / →표시는 2026-06-03 당선자 7-1 취임) ──
 window.GYEONGGI = {
   name: "경기도",
