@@ -164,6 +164,71 @@ def get_jokuk():
     return fallback("보도자료", url)
 
 
+def get_ggc_council():
+    """경기도의회 의원 보도자료 (서버 렌더링 표)"""
+    base = "https://www.ggc.go.kr"
+    list_url = base + "/site/main/xb/lwmkr/lawmakerpressrelease"
+    soup = fetch(list_url)
+    items = []
+    if soup:
+        for tr in soup.find_all("tr"):
+            a = tr.find("a")
+            if not a or "lawmakerpressrelease/" not in a.get("href", ""):
+                continue
+            title = re.sub(r"\s*새글$", "", clean(a.get_text()))
+            if len(title) < 6:
+                continue
+            href = a.get("href", "")
+            full = href if href.startswith("http") else base + href
+            items.append(f"- {title} (원문: {full})")
+            if len(items) >= 2:
+                break
+    return items or fallback("의원 보도자료", list_url)
+
+
+def get_gg_province():
+    """경기도청 공보 브리핑 (서버 렌더링 표, URL의 세션ID 제거)"""
+    base = "https://gnews.gg.go.kr"
+    list_url = base + "/briefing/brief_gongbo.do"
+    soup = fetch(list_url)
+    items = []
+    if soup:
+        for tr in soup.find_all("tr"):
+            a = tr.find("a")
+            if not a or "brief_gongbo_view" not in a.get("href", ""):
+                continue
+            title = clean(a.get_text())
+            if len(title) < 6:
+                continue
+            href = re.sub(r";jsessionid=[^?]*", "", a.get("href", ""))
+            full = href if href.startswith("http") else base + href
+            items.append(f"- {title} (원문: {full})")
+            if len(items) >= 2:
+                break
+    return items or fallback("보도자료", list_url)
+
+
+def get_goe():
+    """경기도교육청 보도자료 (제목은 서버 렌더링, 개별 글 링크는 JS라 게시판으로 연결)"""
+    list_url = "https://www.goe.go.kr/goe/na/ntt/selectNttList.do?mi=10102&bbsId=1922"
+    soup = fetch(list_url)
+    items = []
+    if soup:
+        seen = set()
+        for a in soup.find_all("a"):
+            t = clean(a.get_text())
+            if "등록일" not in t:
+                continue
+            title = re.sub(r"\s*등록일.*$", "", t).strip()
+            if len(title) < 6 or title in seen:
+                continue
+            seen.add(title)
+            items.append(f"- {title} (원문: {list_url})")
+            if len(items) >= 2:
+                break
+    return items or fallback("보도자료", list_url)
+
+
 def get_reform():
     """개혁신당 논평·브리핑 (서버 렌더링, /news/briefing, div.ni-title)"""
     base = "https://www.reformparty.kr"
@@ -201,6 +266,9 @@ def build_md():
         ("조국혁신당", get_jokuk()),
         ("국민의힘", get_ppp()),
         ("개혁신당", get_reform()),
+        ("경기도의회", get_ggc_council()),
+        ("경기도청", get_gg_province()),
+        ("경기도교육청", get_goe()),
     ]
     body = "\n\n".join(f"## {name}\n" + "\n".join(items) for name, items in sections)
 

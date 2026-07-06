@@ -191,10 +191,17 @@ window.BRIEF_BOARDS = [
   { name: "더불어민주당", color: "#0050a0", url: "https://theminjoo.kr/main/sub/news/list.php?brd=11&cate=105" },
   { name: "국민의힘", color: "#e61e2b", url: "https://www.peoplepowerparty.kr/news/comment/BBSDD0001" },
   { name: "조국혁신당", color: "#0073cf", url: "https://rebuildingkoreaparty.kr/news/press-release" },
-  { name: "개혁신당", color: "#ff7920", url: "https://www.reformparty.kr/briefing" },
+  { name: "개혁신당", color: "#ff7920", url: "https://www.reformparty.kr/news/briefing" },
   { name: "경기도의회", color: "#0c4da2", url: "https://www.ggc.go.kr/site/main/xb/lwmkr/lawmakerpressrelease" },
   { name: "경기도청", color: "#0c4da2", url: "https://gnews.gg.go.kr/briefing/brief_gongbo.do" },
   { name: "경기도교육청", color: "#00843d", url: "https://www.goe.go.kr/goe/na/ntt/selectNttList.do?mi=10102&bbsId=1922" }
+];
+
+// ── 오늘의 브리핑 '기관별 소식'에 섹션으로 함께 노출할 경기 기관 (md의 ## 헤더명과 일치) ──
+window.GG_ORGS = [
+  { name: "경기도의회", color: "#0c4da2", home: "https://www.ggc.go.kr/site/main/xb/lwmkr/lawmakerpressrelease" },
+  { name: "경기도청", color: "#0c4da2", home: "https://gnews.gg.go.kr/briefing/brief_gongbo.do" },
+  { name: "경기도교육청", color: "#00843d", home: "https://www.goe.go.kr/goe/na/ntt/selectNttList.do?mi=10102&bbsId=1922" }
 ];
 
 // ── 경기도 31개 시·군 (시장: 민선8기 현직 2022 / →표시는 2026-06-03 당선자 7-1 취임) ──

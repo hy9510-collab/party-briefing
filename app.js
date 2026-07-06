@@ -554,7 +554,7 @@ function briefMats(name) {
   return parsed.filter(m => m.tag).map(m => ({ tag: "", text: m.tag, link: m.link }));
 }
 function renderBriefings() {
-  const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES];
+  const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES, ...(window.GG_ORGS || [])];
   const secs = order.map(e => {
     const list = briefMats(e.name);
     if (!list.length) return "";
