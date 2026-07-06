@@ -59,44 +59,8 @@ async function loadDaily() {
   } catch { DAILY = {}; }
 }
 
-// ── 메인 화면: 오늘의 이슈 + 대통령실 + 정당 카드 ──
+// ── 메인 화면: 히어로 + 메뉴 타일 ──
 function renderHome() {
-  const issues = DAILY["오늘의 이슈"] || [];
-  const issueGroups = [
-    { key: "대통령실", label: "🏛️ 대통령실", home: "https://www.president.go.kr/" },
-    { key: "정책브리핑", label: "📰 대한민국 정책브리핑", home: "https://www.korea.kr/" },
-    { key: "국회", label: "🏛️ 국회", home: "https://www.assembly.go.kr/" },
-    { key: "정당", label: "🏳️ 정당", home: "" }
-  ];
-  const stripTag = t => t.replace(/^\[[^\]]+\]\s*/, "");
-  // 이슈 한 줄: 날짜는 칩으로, 제목 전체를 게시판·원문 링크로 (긴 URL은 숨김)
-  const issueLine = raw => {
-    const { tag, text, link } = parseMat(raw);
-    const chip = tag ? `<span class="bp-tag">${esc(tag)}</span> ` : "";
-    return link
-      ? `<li class="item">${chip}<a class="issue-link" href="${link}" target="_blank" rel="noopener">${esc(text)} ›</a></li>`
-      : `<li class="item">${chip}${esc(text)}</li>`;
-  };
-  const issueGroupHtml = issueGroups.map(g => {
-    const list = issues.filter(t => t.startsWith(`[${g.key}]`)).map(stripTag);
-    if (!list.length) return "";
-    const title = g.home
-      ? `<a class="issue-grp-link" href="${g.home}" target="_blank" rel="noopener">${g.label} →</a>`
-      : `<span class="issue-grp-link">${g.label}</span>`;
-    return `<div class="issue-grp"><div class="issue-grp-title">${title}</div>
-      <ul>${list.map(issueLine).join("")}</ul></div>`;
-  }).join("");
-  const issueHtml = `
-    <div class="issue-box">
-      <div class="issue-head">
-        <div class="issue-title">📌 주요 이슈</div>
-        <button class="mini-btn" onclick="location.hash='#briefings'">📰 브리핑 모아보기</button>
-      </div>
-      ${issueGroupHtml
-        ? `<div class="issue-grid">${issueGroupHtml}</div>`
-        : '<p class="empty">등록된 이슈가 없습니다. (정당정책_오늘내용.md 의 “## 오늘의 이슈”에 [대통령실]/[정책브리핑]/[국회]/[정당] 으로 적어주세요)</p>'}
-    </div>`;
-
   const hero = `
     <section class="hero">
       <h2>대한민국 정치, 한 곳에서 봅니다</h2>
@@ -132,7 +96,7 @@ function renderHome() {
       </a>
     </div>`;
 
-  view.innerHTML = hero + tiles + issueHtml;
+  view.innerHTML = hero + tiles;
   foot.innerHTML = "각 메뉴를 누르면 자세한 정보와 그날의 자료가 나옵니다. · 지도부 정보 기준일 2026-06-19";
 }
 
