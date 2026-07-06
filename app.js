@@ -511,6 +511,7 @@ function renderGgCouncil() {
       <div class="cc-total">전체 도의원 ${total(GA_SEATS)}명</div>
       <div class="cc-seats">${seatStr(GA_SEATS)}</div>
       <div class="cc-src">지역구 146 + 비례대표 21 · 2026-06-03 제9회 지방선거 결과(선관위·언론 보도 교차확인).</div>
+      <a class="cc-btn" href="https://ggc-attendance.vercel.app/12th.html" target="_blank" rel="noopener">📋 경기도의원 현황 보기 ↗</a>
     </div>`;
 
   const councilCard = name => {
