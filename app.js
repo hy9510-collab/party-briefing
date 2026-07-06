@@ -488,7 +488,12 @@ function renderGyeonggiEdu() {
 // 기관별 오늘 자료 전체 (안내성 '확인 필요' 항목은 제외)
 function briefMats(name) {
   const { mats } = splitItems(DAILY[name]);
-  return mats.map(parseMat).filter(m => m.text && !/확인\s*필요/.test(m.text));
+  const parsed = mats.map(parseMat)
+    .filter(m => !/확인\s*필요/.test((m.text || "") + (m.tag || "")));
+  const real = parsed.filter(m => m.text);          // 실제 수집된 자료(본문 있음)
+  if (real.length) return real;
+  // 실제 자료가 없으면 괄호로 감싼 안내문("게시판에서 확인하세요")을 본문으로 노출
+  return parsed.filter(m => m.tag).map(m => ({ tag: "", text: m.tag, link: m.link }));
 }
 function renderBriefings() {
   const order = [PRESIDENT, GOVERNMENT, ASSEMBLY, ...PARTIES];
