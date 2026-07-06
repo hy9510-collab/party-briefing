@@ -383,10 +383,10 @@ function renderGyeonggiOrg() {
       <button class="back" onclick="location.hash=''">← 메인으로</button>
       <h2>🗺️ 경기도 조직</h2>
       <div class="nav-tiles">
-        <a class="nav-tile" style="--c:#0c4da2" href="https://www.ggc.go.kr/" target="_blank" rel="noopener">
+        <a class="nav-tile" style="--c:#0c4da2" onclick="location.hash='#gg-council'">
           <div class="nt-ico">🏛️</div>
-          <div class="nt-t">경기도의회 ↗</div>
-          <div class="nt-s">경기도의회 공식 누리집(의원·의사일정·회의록)</div>
+          <div class="nt-t">경기도의회 · 31개 시·군의회</div>
+          <div class="nt-s">정당별 의석수 · 의장단 (경기도의회 + 31개 시·군의회)</div>
         </a>
         <a class="nav-tile" style="--c:${GYEONGGI.color}" onclick="location.hash='#gyeonggi'">
           <div class="nt-ico">🗺️</div>
@@ -484,6 +484,63 @@ function renderGyeonggiEdu() {
   foot.innerHTML = "교육지원청을 누르면 해당 교육지원청 공식 홈페이지로 이동합니다.";
 }
 
+// ── 상세 화면: 경기도의회 + 31개 시·군의회 (정당별 의석수) ──
+// 데이터: window.GG_COUNCIL (2026-06-03 제9회 지방선거 당선인, 선관위 명부)
+//  - prov: 각 시·군의 '도의원(지역구)' 정당별 수 → 합산 = 경기도의회 지역구 구성
+//  - basic: 각 '시·군의회' 정당별 수(지역구+비례 포함) → 시·군의회 전체 구성
+function renderGgCouncil() {
+  const C = window.GG_COUNCIL || {};
+  const g = window.GYEONGGI;
+  const PC = { 민: ["더불어민주당", "#2b6cb0"], 국: ["국민의힘", "#c0392b"], 조국: ["조국혁신당", "#0073cf"], 진: ["진보당", "#b81d3e"], 개: ["개혁신당", "#d97a34"], 무: ["무소속", "#6b7280"], 기본: ["기본소득당", "#16a085"], 사민: ["사회민주당", "#8e44ad"], 정의: ["정의당", "#d4a017"], 녹정: ["녹색정의당", "#2e8b57"], 노동: ["노동당", "#a93226"] };
+  const total = obj => Object.values(obj || {}).reduce((a, b) => a + b, 0);
+  const seatStr = obj => Object.entries(obj || {})
+    .sort((a, b) => b[1] - a[1])
+    .map(([p, n]) => `<span class="cc-seat" style="color:${(PC[p] || ["", "#444"])[1]}">${esc((PC[p] || [p])[0])} ${n}</span>`)
+    .join("");
+  const leadLine = lead => lead
+    ? `<div class="cc-lead">🏛 ${esc(lead)}</div>`
+    : `<div class="cc-lead muted">🏛 의장단 확인 중</div>`;
+
+  // 경기도의회 제12대 공식 구성(지역구 146 + 비례 21 = 167) — 2026-06-03 제9회 지방선거, 언론 다수 교차검증
+  const GA_SEATS = { 민: 144, 국: 22, 조국: 1 };
+  const topCard = `<div class="cc-top">
+      <div class="cc-name">
+        <a class="title-home" href="https://www.ggc.go.kr/" target="_blank" rel="noopener" style="color:#0c4da2">경기도의회 ↗</a>
+      </div>
+      <div class="cc-lead muted">🏛 의장단 미선출 · 제1차 본회의에서 선출 예정</div>
+      <div class="cc-total">전체 도의원 ${total(GA_SEATS)}명</div>
+      <div class="cc-seats">${seatStr(GA_SEATS)}</div>
+      <div class="cc-src">지역구 146 + 비례대표 21 · 2026-06-03 제9회 지방선거 결과(선관위·언론 보도 교차확인).</div>
+    </div>`;
+
+  const councilCard = name => {
+    const d = C[name];
+    const b = d && d.basic;
+    const body = b
+      ? `<div class="cc-total">총 ${total(b)}명</div><div class="cc-seats">${seatStr(b)}</div>`
+      : `<div class="cc-lead muted">의석 자료 확인 중</div>`;
+    return `<div class="gg-cell"><div class="cc-card">
+        <div class="gg-name">${esc(name)}의회</div>
+        ${leadLine("")}
+        ${body}
+      </div></div>`;
+  };
+  const grid = region => `<div class="gg-grid">${g.cities.filter(c => c.region === region).map(c => councilCard(c.name)).join("")}</div>`;
+  const cnt = region => g.cities.filter(c => c.region === region).length;
+
+  view.innerHTML = `<div class="detail" style="--c:#0c4da2">
+      <button class="back" onclick="location.hash='#gyeonggi-org'">← 경기도 조직</button>
+      <h2 style="color:#0c4da2;border-color:#0c4da2">🏛 경기도의회 · 31개 시·군의회</h2>
+      ${topCard}
+      <div class="sec-title">경기남부 시·군의회 <span class="gt-count">${cnt("남")}곳</span></div>
+      ${grid("남")}
+      <div class="sec-title">경기북부 시·군의회 <span class="gt-count">${cnt("북")}곳</span></div>
+      ${grid("북")}
+      <p class="note">정당별 의석수는 2026-06-03 제9회 지방선거 당선인(중앙선거관리위원회 명부) 기준입니다. 시·군의회는 지역구+비례 전체, 경기도의회(상단)는 지역구 도의원 합산입니다. 의장단은 각 의회 개원·선출이 확인되는 대로 채웁니다.</p>
+    </div>`;
+  foot.innerHTML = "정당별 의석수는 선관위 당선인 명부 기준(민선9기). · 의장단은 확정 시 반영합니다.";
+}
+
 // ── 브리핑·모두발언 모아보기 ──
 // 기관별 오늘 자료 전체 (안내성 '확인 필요' 항목은 제외)
 function briefMats(name) {
@@ -539,6 +596,7 @@ function route() {
   if (id === "gyeonggi") { renderGyeonggi(); window.scrollTo(0, 0); return; }
   if (id === "gyeonggi-edu") { renderGyeonggiEdu(); window.scrollTo(0, 0); return; }
   if (id === "gyeonggi-org") { renderGyeonggiOrg(); window.scrollTo(0, 0); return; }
+  if (id === "gg-council") { renderGgCouncil(); window.scrollTo(0, 0); return; }
   if (id === "briefings") { renderBriefings(); window.scrollTo(0, 0); return; }
   if (id === GOVERNMENT.id) { renderGovernment(GOVERNMENT); window.scrollTo(0, 0); return; }
   if (id === ASSEMBLY.id) { renderAssembly(ASSEMBLY); window.scrollTo(0, 0); return; }
