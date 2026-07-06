@@ -14,7 +14,12 @@ import os
 from datetime import datetime, timezone, timedelta
 
 import requests
+import urllib3
 from bs4 import BeautifulSoup
+
+# 일부 공식 사이트(예: theminjoo.kr)는 인증서 체인이 불완전해 검증이 실패한다.
+# 공개 게시판을 '읽기만' 하고 자격정보를 보내지 않으므로 검증을 끄고 경고만 숨긴다.
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Windows 콘솔에서도 한글/이모지 출력이 깨지지 않도록
 try:
@@ -38,7 +43,7 @@ HEADERS = {
 
 def fetch(url, timeout=12):
     try:
-        r = requests.get(url, headers=HEADERS, timeout=timeout)
+        r = requests.get(url, headers=HEADERS, timeout=timeout, verify=False)
         r.encoding = r.apparent_encoding or "utf-8"
         return BeautifulSoup(r.text, "html.parser")
     except Exception as e:
@@ -128,9 +133,27 @@ def get_government():
 
 
 def get_assembly():
+    """국회뉴스ON 최신 기사 (서버 렌더링, span.main_title)"""
     news = "https://www.naon.go.kr/"
     bill = "https://likms.assembly.go.kr/bill/main.do"
-    return [
+    soup = fetch(news)
+    items = []
+    if soup:
+        seen = set()
+        for a in soup.find_all("a"):
+            href = a.get("href", "")
+            if "storyId" not in href:
+                continue
+            sp = a.find("span", class_=re.compile("main_title"))
+            title = clean(sp.get_text()) if sp else ""
+            if len(title) < 8 or title in seen:
+                continue
+            seen.add(title)
+            full = href if href.startswith("http") else "https://www.naon.go.kr" + href
+            items.append(f"- {title} (원문: {full})")
+            if len(items) >= 2:
+                break
+    return items or [
         f"- ({TODAY_LABEL} 의사일정·안건은 국회뉴스ON에서 확인하세요) (원문: {news})",
         f"- 의안정보시스템 계류 법안 (원문: {bill})",
     ]
@@ -142,8 +165,28 @@ def get_jokuk():
 
 
 def get_reform():
-    url = "https://www.reformparty.kr/briefing"
-    return fallback("논평·브리핑", url)
+    """개혁신당 논평·브리핑 (서버 렌더링, /news/briefing, div.ni-title)"""
+    base = "https://www.reformparty.kr"
+    list_url = base + "/news/briefing"
+    soup = fetch(list_url)
+    items = []
+    if soup:
+        seen = set()
+        for a in soup.find_all("a", href=re.compile(r"/news/briefing/\d+")):
+            tit = a.find("div", class_="ni-title")
+            title = clean(tit.get_text()) if tit else ""
+            if len(title) < 6:
+                continue
+            href = a.get("href", "")
+            full = href if href.startswith("http") else base + href
+            key = title[:30]
+            if key in seen:
+                continue
+            seen.add(key)
+            items.append(f"- {title} (원문: {full})")
+            if len(items) >= 2:
+                break
+    return items or fallback("논평·브리핑", list_url)
 
 
 # ── md 생성 ───────────────────────────────────────────────────────────────────
