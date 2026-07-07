@@ -497,9 +497,15 @@ function renderGgCouncil() {
     .sort((a, b) => b[1] - a[1])
     .map(([p, n]) => `<span class="cc-seat" style="color:${(PC[p] || ["", "#444"])[1]}">${esc((PC[p] || [p])[0])} ${n}</span>`)
     .join("");
-  const leadLine = lead => lead
-    ? `<div class="cc-lead">🏛 ${esc(lead)}</div>`
-    : `<div class="cc-lead muted">🏛 의장단 확인 중</div>`;
+  const PSHORT = { 민: "민주", 국: "국힘", 조국: "조국", 진: "진보", 개: "개혁", 무: "무소속", 기본: "기본소득", 사민: "사민", 정의: "정의" };
+  const pTag = p => p ? `(${esc(PSHORT[p] || p)})` : "";
+  const leadLine = name => {
+    const L = (window.GG_COUNCIL_LEAD || {})[name];
+    if (!L || !L.c) return `<div class="cc-lead muted">🏛 의장단 선출 진행 중</div>`;
+    const chair = `의장 ${esc(L.c[0])}${pTag(L.c[1])}`;
+    const vice = (L.v || []).map(x => `부의장 ${esc(x[0])}${pTag(x[1])}`).join(" · ");
+    return `<div class="cc-lead">🏛 ${chair}${vice ? " · " + vice : ""}</div>`;
+  };
 
   // 경기도의회 제12대 공식 구성(지역구 146 + 비례 21 = 167) — 2026-06-03 제9회 지방선거, 언론 다수 교차검증
   const GA_SEATS = { 민: 144, 국: 22, 조국: 1 };
@@ -507,10 +513,10 @@ function renderGgCouncil() {
       <div class="cc-name">
         <a class="title-home" href="https://www.ggc.go.kr/" target="_blank" rel="noopener" style="color:#0c4da2">경기도의회 ↗</a>
       </div>
-      <div class="cc-lead muted">🏛 의장단 미선출 · 제1차 본회의에서 선출 예정</div>
+      <div class="cc-lead">🏛 의장 남종섭(민주) · 부의장 고은정(민주)·김미숙(민주)</div>
       <div class="cc-total">전체 도의원 ${total(GA_SEATS)}명</div>
       <div class="cc-seats">${seatStr(GA_SEATS)}</div>
-      <div class="cc-src">지역구 146 + 비례대표 21 · 2026-06-03 제9회 지방선거 결과(선관위·언론 보도 교차확인).</div>
+      <div class="cc-src">지역구 146 + 비례대표 21 · 2026-06-03 제9회 지방선거 결과(선관위·언론 보도 교차확인). 의장단 2026-07-07 선출.</div>
       <a class="cc-btn" href="https://ggc-attendance.vercel.app/12th.html" target="_blank" rel="noopener">📋 경기도의원 현황 보기 ↗</a>
     </div>`;
 
@@ -522,7 +528,7 @@ function renderGgCouncil() {
       : `<div class="cc-lead muted">의석 자료 확인 중</div>`;
     return `<div class="gg-cell"><div class="cc-card">
         <div class="gg-name">${esc(name)}의회</div>
-        ${leadLine("")}
+        ${leadLine(name)}
         ${body}
       </div></div>`;
   };
@@ -537,9 +543,9 @@ function renderGgCouncil() {
       ${grid("남")}
       <div class="sec-title">경기북부 시·군의회 <span class="gt-count">${cnt("북")}곳</span></div>
       ${grid("북")}
-      <p class="note">정당별 의석수는 2026-06-03 제9회 지방선거 당선인(중앙선거관리위원회 명부) 기준입니다. 시·군의회는 지역구+비례 전체, 경기도의회(상단)는 지역구 도의원 합산입니다. 의장단은 각 의회 개원·선출이 확인되는 대로 채웁니다.</p>
+      <p class="note">정당별 의석수는 2026-06-03 제9회 지방선거 당선인(중앙선거관리위원회 명부) 기준입니다. 시·군의회는 지역구+비례 전체, 경기도의회(상단)는 지역구 도의원 합산입니다. 의장단은 2026년 6~7월 각 의회 개원·지역 언론 기준으로 확정된 곳만 표기했으며, 원구성 진행 중인 5곳(고양·안양·남양주·평택·의정부)은 '선출 진행 중'으로 표시했습니다.</p>
     </div>`;
-  foot.innerHTML = "정당별 의석수는 선관위 당선인 명부 기준(민선9기). · 의장단은 확정 시 반영합니다.";
+  foot.innerHTML = "정당별 의석수는 선관위 당선인 명부 기준(민선9기). · 의장단은 2026년 6~7월 각 의회·지역 언론 기준(확정된 곳만 표기).";
 }
 
 // ── 브리핑·모두발언 모아보기 ──
