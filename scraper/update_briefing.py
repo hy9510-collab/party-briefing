@@ -3,9 +3,9 @@
 정당정책_오늘내용.md 를 갱신하는 스크립트.
 GitHub Actions에서 무료로 실행됩니다.
 
-- 더불어민주당 / 국민의힘: 서버 렌더링 게시판 → 실제 제목·링크 수집
-- 조국혁신당(Next.js)/개혁신당/대통령실: JS 렌더링이라 목록 수집이 어려워
-  날짜와 함께 공식 게시판 링크를 안내(지어내지 않음)
+- 서버 렌더링 게시판(민주당·국민의힘·개혁신당·국회·경기도청 등): HTML에서 실제 제목·링크 수집
+- 대통령실·조국혁신당: JS 렌더링이지만 공개 JSON API가 있어 실제 제목·링크 수집(각 함수 참고)
+- 수집 실패 시에만 날짜와 함께 공식 게시판 링크를 안내(지어내지 않음)
 """
 import sys
 import io
@@ -116,7 +116,31 @@ def get_ppp():
 # ── JS 렌더링이라 목록 수집이 어려운 곳: 날짜 + 게시판 링크 안내 ──────────────────
 
 def get_president():
+    """대통령실 브리핑 (JS 목록이지만 게시판 AJAX가 JSON을 반환 → 실제 제목 수집)"""
     url = "https://www.president.go.kr/briefings"
+    api = "https://www.president.go.kr/ajaxf/frBoard/bbsViewGalleryList.do"
+    payload = {
+        "pageNo": "1", "pagePerCnt": "10",
+        "MENU_CD": "nFSy219D", "CONTENTS_CD": "vqNUjDNc",
+        "pSiteNo": "2", "pBoardSeq": "2",
+        "BBS_CD": "", "SHORT_URL": "briefings", "sSearchGbn": "", "sSearchTxt": "",
+    }
+    try:
+        r = requests.post(api, data=payload, timeout=12, verify=False,
+                          headers={**HEADERS, "X-Requested-With": "XMLHttpRequest", "Referer": url})
+        rows = (r.json().get("data") or {}).get("list") or []
+        items = []
+        for row in rows:
+            title, bbs = clean(row.get("SUBJECT")), row.get("BBS_CD")
+            if len(title) < 6 or not bbs:
+                continue
+            items.append(f"- {title} (원문: {url}/{bbs})")
+            if len(items) >= 2:
+                break
+        if items:
+            return items
+    except Exception as e:
+        print(f"  [WARN] 대통령실 수집 실패: {e}")
     return [f"- ({TODAY_LABEL} 브리핑은 대통령실 게시판에서 확인하세요) (원문: {url})"]
 
 
@@ -160,7 +184,28 @@ def get_assembly():
 
 
 def get_jokuk():
+    """조국혁신당 보도자료 (Next.js. 공개 API가 JSON 목록을 반환 → 실제 제목 수집)"""
     url = "https://rebuildingkoreaparty.kr/news/press-release"
+    api = "https://api.rebuildingkoreaparty.kr/api/board/list"
+    body = {"page": 1, "categoryId": 9, "recordSize": 10, "pageSize": 5, "order": "recent"}
+    try:
+        r = requests.post(api, json=body, timeout=12, verify=False,
+                          headers={**HEADERS, "Origin": "https://rebuildingkoreaparty.kr", "Referer": url})
+        rows = r.json().get("list") or []
+        # 목록에 고정글이 섞여 있어 실제 최신순으로 다시 정렬
+        rows.sort(key=lambda x: x.get("createdAt") or "", reverse=True)
+        items = []
+        for row in rows:
+            title, bid = clean(row.get("title")), row.get("id")
+            if len(title) < 6 or not bid:
+                continue
+            items.append(f"- {title} (원문: {url}/{bid})")
+            if len(items) >= 2:
+                break
+        if items:
+            return items
+    except Exception as e:
+        print(f"  [WARN] 조국혁신당 수집 실패: {e}")
     return fallback("보도자료", url)
 
 
@@ -298,7 +343,7 @@ def build_md():
     md = f"""# 오늘의 정당정책·대통령실 브리핑 ({TODAY_STR} 기준)
 
 > 형식: "## 구분" 아래 "- 자료 (원문: 링크)" / 일정은 "- [일정] 내용"
-> 매일 자동으로 각 공식 게시판에서 수집합니다. 서버 렌더링 게시판(민주당·국민의힘)은 실제 최신 제목을, JS 게시판은 게시판 링크를 안내합니다.
+> 매일 자동으로 각 공식 게시판에서 수집합니다. 서버 렌더링·공개 API 게시판은 실제 최신 제목을, 수집이 안 되는 곳은 게시판 링크만 안내합니다(지어내지 않음).
 
 ## 오늘의 이슈
 {issue_block}
