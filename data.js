@@ -39,8 +39,8 @@ window.GOVERNMENT = {
   name: "정부 (내각)",
   color: "#2e7d5b",
   home: "https://www.opm.go.kr/",
-  pm: "김민석 (국무총리, 2025-07-03 취임)",
-  pmPrev: "前 더불어민주당 수석최고위원 · 국회의원 4선(서울 영등포을, 15·16·21·22대)",
+  pm: "한성숙 (국무총리, 2026-07-02 취임)",
+  pmPrev: "前 중소벤처기업부 장관 · 前 네이버 대표 · 이재명 정부 2번째 총리(국회 인준 2026-06-30, 20년 만의 두 번째 여성 총리)",
   pmLoc: "세종",
   note: "정부조직 개편 반영: 기획재정부 → 재정경제부+기획예산처 / 환경부 → 기후에너지환경부 / 여성가족부 → 성평등가족부 / 산업통상자원부 → 산업통상부. 개각 진행 중이라 일부 장관·소재지는 바뀔 수 있습니다.",
   // 부처는 아니지만 총리를 보좌하는 핵심 사무기구 — 부처 목록 위에 별도 카드로 표시
@@ -67,7 +67,7 @@ window.GOVERNMENT = {
     { dept: "성평등가족부", name: "원민경", prev: "前 민변 여성인권위원장·여성·소수자 인권 변호사", loc: "서울", since: "2025-10-01", url: "https://www.mogef.go.kr/nw/enw/nw_enw_s001.do" },
     { dept: "국토교통부", name: "김윤덕", prev: "더불어민주당 의원", loc: "세종", since: "2025-07-31", url: "https://www.molit.go.kr/USR/NEWS/m_71/lst.jsp" },
     { dept: "해양수산부", name: "황종우", prev: "前 해양수산부 기획조정실장(행시 38회)", loc: "세종(부산 이전 추진)", since: "2026-03-25", url: "https://www.mof.go.kr/doc/ko/selectDocList.do?menuSeq=971&bbsSeq=10" },
-    { dept: "중소벤처기업부", name: "한성숙", prev: "前 네이버 대표이사", loc: "세종", since: "2025-07-23", url: "https://www.mss.go.kr/site/smba/ex/bbs/List.do?cbIdx=86" }
+    { dept: "중소벤처기업부", name: "인선 중", prev: "前 한성숙 장관, 국무총리 임명(2026-07)으로 이동", loc: "세종", since: "", url: "https://www.mss.go.kr/site/smba/ex/bbs/List.do?cbIdx=86" }
   ],
   boards: [
     { label: "국무조정실·국무총리비서실", url: "https://www.opm.go.kr/" },
