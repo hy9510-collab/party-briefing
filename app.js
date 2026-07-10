@@ -143,7 +143,7 @@ function renderGovernment(g) {
       <div class="dept"><a class="dept-home" href="${homeOf(m.url)}">${esc(m.dept)}</a><span class="loc-tag loc-${locKey(m.loc)}">${esc(m.loc)}</span></div>
       <div class="minister">장관 · ${esc(m.name)}${m.since ? ` <span class="since">취임 ${esc(m.since)}</span>` : ""}</div>
       ${m.prev ? `<div class="prev">${esc(m.prev)}</div>` : ""}
-      <div class="vice">차관 · ${esc(m.vice || "확인 필요")}</div>
+      ${(m.vice && m.vice.length) ? `<div class="vice">${m.vice.map(v => `<span class="vice-row"><b>${esc(v.r)}</b> ${esc(v.n)}${v.p ? ` <span class="vice-prev">${esc(v.p)}</span>` : ""}</span>`).join("")}</div>` : `<div class="vice muted">차관 · 확인 필요</div>`}
       <a class="dept-link" href="${m.url}">소식·보도자료 →</a>
     </div>`;
   const pmoHtml = (g.pmOffices || []).map(o => `
@@ -290,7 +290,7 @@ function renderOrg() {
       <div class="ig-card-t"><a class="ig-home" href="${homeOf(m.url)}" target="_blank" rel="noopener">${esc(m.dept)} <span class="ig-ext">↗</span></a><span class="loc-tag loc-${lc}">${esc(m.loc)}</span></div>
       <div class="ig-card-s">장관 · ${esc(m.name)}</div>
       ${m.prev ? `<div class="ig-card-v">${esc(m.prev)}</div>` : ""}
-      ${m.vice ? `<div class="ig-card-v">차관 · ${esc(m.vice)}</div>` : ""}
+      ${(m.vice && m.vice.length) ? `<div class="ig-card-v">${m.vice.map(v => `${esc(v.r)} ${esc(v.n)}`).join(" · ")}</div>` : ""}
     </div>`;
   };
   const govRegionDefs = [
