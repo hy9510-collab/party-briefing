@@ -14,7 +14,7 @@ window.METRO = [
   { name: "부산광역시", home: "https://www.busan.go.kr", gov: "전재수", govP: "민",
     edu: "김석준", eduUrl: "https://www.pen.go.kr",
     council: { name: "부산광역시의회", home: "https://council.busan.go.kr", chair: ["강무길", "국"],
-      vice: [["송상조", "국"]], viceNote: "제2부의장 선출 예정", committees: 7, seats: { 국: 37, 민: 11 } } },
+      vice: [["송상조", "국"]], viceNote: "제2부의장 공석(선출 예정)", committees: 7, seats: { 국: 37, 민: 11 } } },
 
   { name: "대구광역시", home: "https://www.daegu.go.kr", gov: "추경호", govP: "국",
     edu: "강은희", eduUrl: "https://www.dge.go.kr",
@@ -49,7 +49,7 @@ window.METRO = [
   { name: "강원특별자치도", home: "https://state.gwd.go.kr", gov: "우상호", govP: "민",
     edu: "강삼영", eduUrl: "https://www.gwe.go.kr",
     council: { name: "강원특별자치도의회", home: "https://council.gangwon.kr", chair: ["김시성", "국"],
-      vice: [], viceNote: "부의장 명단 확인 중", committees: 6, seats: { 국: 30, 민: 24 } } },
+      vice: [["김용복", "무"], ["박윤미", "민"]], committees: 6, seats: { 국: 30, 민: 24 } } },
 
   { name: "충청북도", home: "https://www.chungbuk.go.kr", gov: "신용한", govP: "민",
     edu: "윤건영", eduUrl: "https://www.cbe.go.kr",
@@ -66,10 +66,10 @@ window.METRO = [
     council: { name: "전북특별자치도의회", home: "https://www.jbstatecouncil.jeonbuk.kr", chair: ["김희수", "민"],
       vice: [["이병도", "민"], ["박정규", "민"]], committees: 6, seats: { 민: 42, 국: 1, 진: 1 } } },
 
-  { name: "전남광주통합특별시", home: "", gov: "민형배", govP: "민",
-    edu: "김대중", eduUrl: "",
-    note: "2026-07-01 광주광역시와 전라남도가 통합해 출범(특별법 제21446호). 인구 약 316만. 공식 홈페이지·통합의회 세부는 확인 중.",
-    council: { name: "전남광주통합특별시의회", home: "", chair: ["송형곤", "민"],
+  { name: "전남광주통합특별시", home: "https://www.jeonnam-gwangju.go.kr", gov: "민형배", govP: "민",
+    edu: "김대중", eduUrl: "https://www.jngjedu.kr",
+    note: "2026-07-01 광주광역시와 전라남도가 통합해 출범(특별법 제21446호). 인구 약 316만. 현재 임시 홈페이지 운영 중.",
+    council: { name: "전남광주통합특별시의회", home: "https://council.jeonnam-gwangju.go.kr", chair: ["송형곤", "민"],
       vice: [["조석호", "민"], ["김문수", "민"]], committees: 11, seats: { 민: 83, 진: 5, 조국: 2, 국: 1 } } },
 
   { name: "경상북도", home: "https://www.gb.go.kr", gov: "이철우", govP: "국",
