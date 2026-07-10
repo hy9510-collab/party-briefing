@@ -65,6 +65,29 @@
   .cc-src { color: #8a93a0; font-size: 11px; margin-top: 5px; }
   .cc-btn { display: inline-block; margin-top: 9px; padding: 7px 13px; background: #0c4da2; color: #fff; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; }
   .cc-btn:hover { background: #093a7a; }
+  /* 광역시·도 조직 카드 */
+  .ms-grid { grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); }
+  .ms-card { background: #f7f8fa; border: 1px solid #e2e6ec; border-radius: 10px; padding: 11px 12px; height: 100%; box-sizing: border-box; }
+  .ms-org { font-size: 15px; font-weight: 700; }
+  .ms-name { color: #1a2333; text-decoration: none; }
+  .ms-name:hover { text-decoration: underline; }
+  .ms-gov { font-size: 13px; margin-top: 4px; }
+  .ms-edu { font-size: 12.5px; color: #33404f; margin-top: 3px; }
+  .ms-edu a { color: #0a6e34; text-decoration: none; }
+  .ms-edu a:hover { text-decoration: underline; }
+  .ms-note { font-size: 11.5px; color: #7a5b1e; background: #fdf7e8; border: 1px solid #f0e3bf; border-radius: 6px; padding: 5px 7px; margin-top: 6px; line-height: 1.4; }
+  .ms-council { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #dfe3ea; }
+  .ms-cname { font-size: 13px; font-weight: 700; }
+  .ms-clink { color: #2a3445; text-decoration: none; }
+  .ms-clink:hover { text-decoration: underline; }
+  .ms-lead { font-size: 12px; color: #33404f; margin: 4px 0; line-height: 1.5; }
+  .ms-meta { font-size: 12px; font-weight: 700; color: #1a2333; margin: 4px 0 5px; }
+  .ms-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: #eceff3; margin-bottom: 5px; }
+  .ms-bar span { display: block; height: 100%; }
+  .ms-seats { display: flex; flex-wrap: wrap; gap: 2px 9px; font-size: 12px; }
+  .ms-seat { white-space: nowrap; font-weight: 600; }
+  .ms-pt { font-weight: 600; margin-left: 1px; }
+  .ms-muted { color: #9aa0a6; font-weight: 500; }
   .edu-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .edu-chip { font-size: 13px; background: #eaf5ee; color: #0a6e34; border: 1px solid #b8dcc6; border-radius: 8px; padding: 7px 11px; text-decoration: none; font-weight: 600; }
   .edu-chip:hover { background: #00843d; color: #fff; }
@@ -238,6 +261,7 @@
 
 <script src="data.js?v=89"></script>
 <script src="council.js?v=89"></script>
-<script src="app.js?v=89"></script>
+<script src="metro.js?v=90"></script>
+<script src="app.js?v=90"></script>
 </body>
 </html>

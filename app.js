@@ -79,6 +79,11 @@ function renderHome() {
         <div class="nt-t">기관별 소식</div>
         <div class="nt-s">각 기관·정당 게시판의 최신 소식을 한눈에</div>
       </a>
+      <a class="nav-tile" style="--c:#1f7a6a" onclick="location.hash='#metro'">
+        <div class="nt-ico">🏙️</div>
+        <div class="nt-t">광역시·도 조직</div>
+        <div class="nt-s">전국 16개 시·도 단체장·교육감·의회(정당별 의석)</div>
+      </a>
       <a class="nav-tile" style="--c:${GYEONGGI.color}" onclick="location.hash='#gyeonggi-org'">
         <div class="nt-ico">🗺️</div>
         <div class="nt-t">경기도 조직</div>
@@ -548,6 +553,58 @@ function renderGgCouncil() {
   foot.innerHTML = "정당별 의석수는 선관위 당선인 명부 기준(민선9기). · 의장단은 2026년 6~7월 각 의회·지역 언론 기준(확정된 곳만 표기).";
 }
 
+// ── 상세 화면: 전국 광역시·도 조직 (한 페이지 카드 모아보기) ──
+// 데이터: window.METRO (제9회 지방선거 2026-06-03 / 2026-07-01 취임)
+function renderMetro() {
+  const M = window.METRO || [];
+  const PC = { 민: ["더불어민주당", "#2b6cb0"], 국: ["국민의힘", "#c0392b"], 조국: ["조국혁신당", "#0073cf"], 진: ["진보당", "#b81d3e"], 무: ["무소속", "#6b7280"] };
+  const PSHORT = { 민: "민주", 국: "국힘", 조국: "조국", 진: "진보", 무: "무소속" };
+  const pColor = p => (PC[p] || ["", "#444"])[1];
+  const pTag = p => p ? `<span class="ms-pt" style="color:${pColor(p)}">(${esc(PSHORT[p] || p)})</span>` : "";
+  const total = obj => Object.values(obj || {}).reduce((a, b) => a + b, 0);
+  const seatEntries = obj => Object.entries(obj || {}).sort((a, b) => b[1] - a[1]);
+  const seatBar = obj => {
+    const t = total(obj) || 1;
+    return `<div class="ms-bar">${seatEntries(obj).map(([p, n]) => `<span style="width:${(n / t * 100).toFixed(1)}%;background:${pColor(p)}" title="${esc((PC[p] || [p])[0])} ${n}"></span>`).join("")}</div>`;
+  };
+  const seatStr = obj => seatEntries(obj).map(([p, n]) => `<span class="ms-seat" style="color:${pColor(p)}">${esc((PC[p] || [p])[0])} ${n}</span>`).join("");
+  const linkOrText = (text, url, cls) => url
+    ? `<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener">${esc(text)} <span class="ig-ext">↗</span></a>`
+    : `<span class="${cls}">${esc(text)} <span class="ms-muted">(확인 중)</span></span>`;
+
+  const card = m => {
+    const c = m.council;
+    const govLabel = m.name.endsWith("도") ? "도지사" : "시장";
+    const viceParts = (c.vice || []).map(v => `부의장 ${esc(v[0])}${pTag(v[1])}`);
+    if (c.viceNote) viceParts.push(`<span class="ms-muted">${esc(c.viceNote)}</span>`);
+    const eduHtml = m.eduUrl
+      ? `<a href="${esc(m.eduUrl)}" target="_blank" rel="noopener">${esc(m.edu)} <span class="ig-ext">↗</span></a>`
+      : `${esc(m.edu)} <span class="ms-muted">(교육청 홈 확인 중)</span>`;
+    const noteHtml = m.note ? `<div class="ms-note">ℹ️ ${esc(m.note)}</div>` : "";
+    return `<div class="gg-cell"><div class="ms-card" style="${partyTint(m.govP)}">
+        <div class="ms-org">${linkOrText(m.name, m.home, "ms-name")}</div>
+        <div class="ms-gov">👤 ${govLabel} · <b style="color:${pColor(m.govP)}">${esc(m.gov)}</b>${pTag(m.govP)}</div>
+        <div class="ms-edu">🎓 교육감 · ${eduHtml}</div>
+        ${noteHtml}
+        <div class="ms-council">
+          <div class="ms-cname">${linkOrText(c.name, c.home, "ms-clink")}</div>
+          <div class="ms-lead">🏛 의장 ${esc(c.chair[0])}${pTag(c.chair[1])}${viceParts.length ? " · " + viceParts.join(" · ") : ""}</div>
+          <div class="ms-meta">상임위 ${c.committees}개 · 의원 ${total(c.seats)}명</div>
+          ${seatBar(c.seats)}
+          <div class="ms-seats">${seatStr(c.seats)}</div>
+        </div>
+      </div></div>`;
+  };
+
+  view.innerHTML = `<div class="detail" style="--c:#1f7a6a">
+      <button class="back" onclick="location.hash=''">← 전체 보기</button>
+      <h2 style="color:#1f7a6a;border-color:#1f7a6a">🏙️ 광역시·도 조직 <span class="gt-count">${M.length}곳</span></h2>
+      <p class="note">2026-06-03 제9회 전국동시지방선거 결과(2026-07-01 취임) 기준입니다. 바탕색·이름색 = 단체장 소속 정당(파랑 더불어민주당·빨강 국민의힘). 광주광역시와 전라남도는 2026-07-01 ‘전남광주통합특별시’로 통합돼 16개 단위입니다. 시·도지사·교육감·의회 원구성은 지역 언론·각 의회 공식 보도로 교차확인했으며, 미확정 항목은 ‘확인 중’으로 표기했습니다.</p>
+      <div class="gg-grid ms-grid">${M.map(card).join("")}</div>
+    </div>`;
+  foot.innerHTML = "기관 이름을 누르면 해당 공식 홈페이지로 이동합니다. · 시·도지사·교육감·의회 구성은 제9회 지방선거(민선9기) 기준입니다.";
+}
+
 // ── 브리핑·모두발언 모아보기 ──
 // 기관별 오늘 자료 전체 (안내성 '확인 필요' 항목은 제외)
 function briefMats(name) {
@@ -604,6 +661,7 @@ function route() {
   if (id === "gyeonggi-edu") { renderGyeonggiEdu(); window.scrollTo(0, 0); return; }
   if (id === "gyeonggi-org") { renderGyeonggiOrg(); window.scrollTo(0, 0); return; }
   if (id === "gg-council") { renderGgCouncil(); window.scrollTo(0, 0); return; }
+  if (id === "metro") { renderMetro(); window.scrollTo(0, 0); return; }
   if (id === "briefings") { renderBriefings(); window.scrollTo(0, 0); return; }
   if (id === GOVERNMENT.id) { renderGovernment(GOVERNMENT); window.scrollTo(0, 0); return; }
   if (id === ASSEMBLY.id) { renderAssembly(ASSEMBLY); window.scrollTo(0, 0); return; }
