@@ -509,7 +509,8 @@ function renderGgCouncil() {
     if (!L || !L.c) return `<div class="cc-lead muted">🏛 의장단 선출 진행 중</div>`;
     const chair = `의장 ${esc(L.c[0])}${pTag(L.c[1])}`;
     const vice = (L.v || []).map(x => `부의장 ${esc(x[0])}${pTag(x[1])}`).join(" · ");
-    return `<div class="cc-lead">🏛 ${chair}${vice ? " · " + vice : ""}</div>`;
+    const note = L.n ? ` <span class="muted">· ${esc(L.n)}</span>` : "";
+    return `<div class="cc-lead">🏛 ${chair}${vice ? " · " + vice : ""}${note}</div>`;
   };
 
   // 경기도의회 제12대 공식 구성(지역구 146 + 비례 21 = 167) — 2026-06-03 제9회 지방선거, 언론 다수 교차검증
