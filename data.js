@@ -1,5 +1,5 @@
 // 정당별 고정 정보(지도부·게시판 링크). 지도부 변동 시 이 파일만 고치면 됩니다.
-// 기준일: 2026-06-19 (6.3 지방선거 직후 개편기 — 최고위원 명단 변동 잦음)
+// 기준일: 2026-08-03 (22대 후반기 국회 원구성 완료 7-23, 조국혁신당 전대 7-25 반영)
 // 대통령실(정당 아님) — 지도부 표 대신 기관 자료만 보여줍니다.
 window.PRESIDENT = {
   id: "president",
@@ -84,30 +84,30 @@ window.ASSEMBLY = {
   speaker: "조정식 (더불어민주당·경기 시흥시을, 2026-06-05 선출)",
   viceSpeakers: "남인순(더불어민주당)·박덕흠(국민의힘)",
   // 17개 상임위원회. 22대 후반기 원구성(2026-06-30) 반영. 명칭 일부 개편, 위원장 11곳 확정(모두 민주당)
-  committeesNote: "22대 후반기 원구성 완료(2026-06-30, 더불어민주당 주도 단독 선출). 위원장 11곳(예산결산특별위 이광재 포함)은 모두 민주당 소속이며, 교육·외교통일·산업통상자원중소벤처기업·보건복지·국토교통·정보·성평등가족위원장은 여야 배분 미합의로 미확정입니다. 상임위 명칭도 일부 개편(재정경제기획·기후에너지환경노동·성평등가족).",
+  committeesNote: "22대 후반기 원구성 완료(2026-07-23). 6월 30일 민주당이 11곳을 단독 선출한 데 이어, 7월 23일 국민의힘 몫 6곳(교육 김희정·외교통일 송석준·산업통상자원중소벤처기업 김성원·보건복지 이만희·국토교통 유의동·정보 이양수)이 선출돼 개원 54일 만에 마무리됐습니다. 성평등가족위원장만 김정재 내정으로 다음 본회의 선출 예정입니다. 상임위 명칭도 일부 개편(재정경제기획·기후에너지환경노동·성평등가족).",
   committees: [
     { name: "국회운영위원회", head: "위원장 한병도", url: "https://steering.na.go.kr:444/steering/index.do" },
     { name: "법제사법위원회", head: "위원장 서영교", url: "https://legislation.na.go.kr:444/legislation/index.do" },
     { name: "정무위원회", head: "위원장 유동수", url: "https://policy.na.go.kr:444/policy/index.do" },
     { name: "재정경제기획위원회", head: "위원장 조승래", url: "https://finance.na.go.kr:444/finance/index.do" },
-    { name: "교육위원회", head: "위원장 미확정", url: "https://edu.na.go.kr:444/edu/index.do" },
+    { name: "교육위원회", head: "위원장 김희정", url: "https://edu.na.go.kr:444/edu/index.do" },
     { name: "과학기술정보방송통신위원회", head: "위원장 송기헌", url: "https://science.na.go.kr:444/science/index.do" },
-    { name: "외교통일위원회", head: "위원장 미확정", url: "https://uft.na.go.kr:444/uft/index.do" },
+    { name: "외교통일위원회", head: "위원장 송석준", url: "https://uft.na.go.kr:444/uft/index.do" },
     { name: "국방위원회", head: "위원장 진성준", url: "https://defense.na.go.kr:444/defense/index.do" },
     { name: "행정안전위원회", head: "위원장 김영진", url: "https://adminhom.na.go.kr:444/adminhom/index.do" },
     { name: "문화체육관광위원회", head: "위원장 이재정", url: "https://cst.na.go.kr:444/cst/index.do" },
     { name: "농림축산식품해양수산위원회", head: "위원장 서삼석", url: "https://agri.na.go.kr:444/agri/index.do" },
-    { name: "산업통상자원중소벤처기업위원회", head: "위원장 미확정", url: "https://industry.na.go.kr:444/industry/index.do" },
-    { name: "보건복지위원회", head: "위원장 미확정", url: "https://health.na.go.kr:444/health/index.do" },
+    { name: "산업통상자원중소벤처기업위원회", head: "위원장 김성원", url: "https://industry.na.go.kr:444/industry/index.do" },
+    { name: "보건복지위원회", head: "위원장 이만희", url: "https://health.na.go.kr:444/health/index.do" },
     { name: "기후에너지환경노동위원회", head: "위원장 김정호", url: "https://environment.na.go.kr:444/environment/index.do" },
-    { name: "국토교통위원회", head: "위원장 미확정", url: "https://ltc.na.go.kr:444/ltc/index.do" },
-    { name: "정보위원회", head: "위원장 미확정", url: "https://intelligence.na.go.kr:444/intelligence/index.do" },
-    { name: "성평등가족위원회", head: "위원장 미확정", url: "https://women.na.go.kr:444/women/index.do" }
+    { name: "국토교통위원회", head: "위원장 유의동", url: "https://ltc.na.go.kr:444/ltc/index.do" },
+    { name: "정보위원회", head: "위원장 이양수", url: "https://intelligence.na.go.kr:444/intelligence/index.do" },
+    { name: "성평등가족위원회", head: "위원장 미확정 (김정재 내정)", url: "https://women.na.go.kr:444/women/index.do" }
   ],
   // 교섭단체(의석 20석 이상). 대표=원내대표, 부대표=원내수석부대표
   negoBlocs: [
-    { party: "더불어민주당", rep: "한병도 (원내대표)", deputy: "확인 필요 (원내수석부대표)", url: "https://www.assembly.go.kr/portal/na/naComm/naAssmPoly.do?menuNo=600155" },
-    { party: "국민의힘", rep: "정점식 (원내대표)", deputy: "확인 필요 (원내수석부대표)", url: "https://www.assembly.go.kr/portal/na/naComm/naAssmPoly.do?menuNo=600155" }
+    { party: "더불어민주당", rep: "한병도 (원내대표)", deputy: "천준호 (원내수석부대표)", url: "https://www.assembly.go.kr/portal/na/naComm/naAssmPoly.do?menuNo=600155" },
+    { party: "국민의힘", rep: "정점식 (원내대표)", deputy: "김승수 (원내수석부대표)", url: "https://www.assembly.go.kr/portal/na/naComm/naAssmPoly.do?menuNo=600155" }
   ],
   negoNote: "조국혁신당·개혁신당 등은 비교섭단체. 후반기 원구성·인선에 따라 변동 가능.",
   boards: [
@@ -140,10 +140,10 @@ window.PARTIES = [
     name: "조국혁신당",
     color: "#0073cf",
     home: "https://rebuildingkoreaparty.kr/",
-    leader: "공석 (조국 前 대표 2026-06-04 사퇴) — 신장식 권한대행",
+    leader: "신장식 (비례대표, 2026-07-25 전대 선출)",
     floorLeader: "김준형 (비례대표)",
-    supremes: "신장식(권한대행·수석최고위원) — 차기 전당대회 2026-07-25 예정",
-    supremesNote: "유동적",
+    supremes: "차규근·황현선 (2026-07-25 전대 선출)",
+    supremesNote: "확정 (전국당원대회 2026-07-25)",
     boards: [
       { label: "보도자료", url: "https://rebuildingkoreaparty.kr/news/press-release" },
       { label: "공지사항", url: "https://rebuildingkoreaparty.kr/news/notice" },
@@ -173,8 +173,8 @@ window.PARTIES = [
     home: "https://www.reformparty.kr/",
     leader: "이준석 (경기 화성시을)",
     floorLeader: "천하람 (비례대표)",
-    supremes: "제2차 전당대회(2025-07-27) 선출 — 공식 명단 확인 필요",
-    supremesNote: "확인 필요",
+    supremes: "김성열·주이삭·김정철 (선출직) · 이주영(정책위의장·당연직)",
+    supremesNote: "확정 (제2차 전대 2025-07-27)",
     boards: [
       { label: "공지사항", url: "https://www.reformparty.kr/notice" },
       { label: "중앙당 홈", url: "https://www.reformparty.kr/" }
